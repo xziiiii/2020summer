@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>首页</title>
+
+<link rel="stylesheet" href="css/base.css" />
+<link rel="stylesheet" href="css/layout.css"/>
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery.SuperSlide.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/vue.min.js"></script>
+</head>
+<body>
+
+<div id="wrapper">
+
+	<header id="header">
+	
+		<div id="loginBar">
+			<div class="w960 tr">
+				<a href="#">登录</a> <span class="sp">|</span> <a href="#">注册</a>
+			</div>
+		</div>
+		
+		<!-- <div id="headBox">
+			<div class="w960 oh">
+				<a href="#" class="fl mt10">住宅专项维修资金综合管理平台</a>
+				<nav id="navs" class="fr">
+				<a href="#">当前页面</a>
+				<a class="active" href="#">返回</a>
+				</nav>
+			</div>
+		</div> -->
+		<div class="head-v3" id="index">
+			<div class="navigation-up">
+					<div class="navigation-v3">
+						<ul>
+							<ul>
+								<!-- 默认被选中项 -->
+								<li :class="i.id == 1 ? 'nav-up-selected-inpage' : ''" v-for="i in nevigatelist" :_t_nav="i.nav">
+									<h2>
+										<a href="#">{{i.label}}</a>
+									</h2>
+								</li>
+							</ul>
+						</ul>
+					</div>
+			</div>
+			<div class="navigation-down">
+				<div v-for="i in navdetails" :id="i.id" :class="i.id == 'product' ? ['nav-down-menu','menu-1'] : ['nav-down-menu','menu-3','menu-1']" style="display: none;" :_t_nav="i.id">
+					<div class="navigation-down-inner">
+						<dl v-for="item in i.childrenlist" :style="item.id == '1' ? {'margin-left': i.leftlength}:''">
+							<dt v-if="item.label !=''">{{item.label}}</dt>
+							<dd v-for="y in item.hreflist">
+								<a class="link" href="#">{{y.label}}</a>
+							</dd>
+						</dl>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+
+
+	</header><!-- // header end --> 
+	
+	<div class="container w960 mt20">
+	<!--------上-------->
+		<div id="processor" >
+			<h1>图书分类</h1>
+			<p>
+			
+			</p>
+		</div>
+		<div id="processor" >
+			<h1>Top 10</h1>
+			<p>
+			
+			</p>
+		</div>
+		
+		<!----------商品列表---------->
+		<div class="index_focus">
+			<div class="" id="box">
+                 <ul>
+			        <li v-for="v in json.list">
+				    <img v-bind:src="v.src" alt="">
+					</br>
+				    <h3>{{v.des}}</h3>
+				    <p>￥{{v.price}}</p>
+			        </li>
+		         </ul>
+            </div>
+		
+		</div>
+
+	</div>   <!-- // container end -->
+
+	<footer id="footer" class="w960 oh">
+		<span class="fl">底部底部</span>
+		<nav class="footNavs tr fr">
+			<a href="#">底部</a>
+			<span class="sp">|</span>
+			<a href="#">底部</a>
+		</nav>
+	</footer><!-- // footer end -->
+	
+</div><!-- // wrapper end -->
+<style>
+
+</style>
+
+<!-- 顶部导航栏 -->
+<script type="text/javascript">
+	jQuery(document).ready(function() {
+		var qcloud = {};
+		$('[_t_nav]').hover(function() {
+			var _nav = $(this).attr('_t_nav');
+			clearTimeout(qcloud[_nav + '_timer']);
+			qcloud[_nav + '_timer'] = setTimeout(function() {
+				$('[_t_nav]').each(function() {
+					$(this)[_nav == $(this).attr('_t_nav') ? 'addClass' : 'removeClass']('nav-up-selected');
+				});
+				$('#' + _nav).stop(true, true).slideDown(200);
+			}, 150);
+		}, function() {
+			var _nav = $(this).attr('_t_nav');
+			clearTimeout(qcloud[_nav + '_timer']);
+			qcloud[_nav + '_timer'] = setTimeout(function() {
+				$('[_t_nav]').removeClass('nav-up-selected');
+				$('#' + _nav).stop(true, true).slideUp(200);
+			}, 150);
+		});
+	});
+
+	new Vue({
+		el: "#index",
+		data: {
+			/* 导航标题 */
+			nevigatelist: [{
+				id: '1',
+				nav: 'home',
+				label: '首页',
+			},  {
+				id: '2',
+				nav: 'tsfl',
+				label: '图书分类',
+			}, {
+				id: '3',
+				nav: 'grzl',
+				label: '个人资料',
+			}, {
+				id: '4',
+				nav: 'ddgl',
+				label: '订单管理',
+			}, {
+				id: '5',
+				nav: 'support',
+				label: '购物车',
+			}, ],
+			/* 导航内明细列表 */
+			navdetails: [
+			    {
+					id: 'tsfl',
+					leftlength : '120px',
+					childrenlist: [{
+							id: '1',
+							/* 列表标题 */
+							label: '',
+							/* 标题下内容列表 */
+							hreflist: [{
+								label: '文艺',
+								href: '#',
+							}, ]
+						},{
+							id: '2',
+							/* 列表标题 */
+							label: '',
+							/* 标题下内容列表 */
+							hreflist: [{
+								label: '教育',
+								href: '#',
+							}, ]
+						},{
+							id: '3',
+							/* 列表标题 */
+							label: '',
+							/* 标题下内容列表 */
+							hreflist: [{
+								label: '人文社科',
+								href: '#',
+							}, ]
+						},{
+							id: '4',
+							/* 列表标题 */
+							label: '',
+							/* 标题下内容列表 */
+							hreflist: [{
+								label: '励志',
+								href: '#',
+							}, ]
+						},
+						{
+							id: '5',
+							/* 列表标题 */
+							label: '',
+							/* 标题下内容列表 */
+							hreflist: [{
+								label: '生活',
+								href: '#',
+							}, ]
+						},
+						{
+							id: '6',
+							/* 列表标题 */
+							label: '',
+							/* 标题下内容列表 */
+							hreflist: [{
+								label: '经营',
+								href: '#',
+							}, ]
+						},
+						{
+							id: '7',
+							/* 列表标题 */
+							label: '',
+							/* 标题下内容列表 */
+							hreflist: [{
+								label: '科技',
+								href: '#',
+							}, ]
+						},
+						{
+							id: '8',
+							/* 列表标题 */
+							label: '',
+							/* 标题下内容列表 */
+							hreflist: [{
+								label: '期刊',
+								href: '#',
+							}, ]
+						},
+					]
+				},
+				// {
+				// 	id: 'grzl',
+				// 	leftlength : '235px',
+				// 	childrenlist: [{
+				// 			id: '1',
+				// 			/* 列表标题 */
+				// 			label: '',
+				// 			/* 标题下内容列表 */
+				// 			hreflist: [{
+				// 				label: '微信',
+				// 				href: '#',
+				// 			}, ]
+				// 		},{
+				// 			id: '2',
+				// 			/* 列表标题 */
+				// 			label: '',
+				// 			/* 标题下内容列表 */
+				// 			hreflist: [{
+				// 				label: '游戏',
+				// 				href: '#',
+				// 			}, ]
+				// 		},{
+				// 			id: '3',
+				// 			/* 列表标题 */
+				// 			label: '',
+				// 			/* 标题下内容列表 */
+				// 			hreflist: [{
+				// 				label: '移动应用',
+				// 				href: '#',
+				// 			}, ]
+				// 		},
+				// 	]
+				// },{
+				// 	id:'cooperate',
+				// 	leftlength : '480px',
+				// 	childrenlist:[
+				// 		{
+				// 			id: '1',
+				// 			/* 列表标题 */
+				// 			label: '',
+				// 			/* 标题下内容列表 */
+				// 			hreflist: [{
+				// 				label: '代理商',
+				// 				href: '#',
+				// 			}, ]
+				// 		},{
+				// 			id: '2',
+				// 			/* 列表标题 */
+				// 			label: '',
+				// 			/* 标题下内容列表 */
+				// 			hreflist: [{
+				// 				label: '微信服务商',
+				// 				href: '#',
+				// 			}, ]
+				// 		},{
+				// 			id: '3',
+				// 			/* 列表标题 */
+				// 			label: '',
+				// 			/* 标题下内容列表 */
+				// 			hreflist: [{
+				// 				label: '创投机构',
+				// 				href: '#',
+				// 			}, ]
+				// 		},
+				// 	],
+				// }
+			],
+		},
+		mounted: function() {
+
+		},
+		methods: {
+
+		}
+	})
+</script>
+<!-- 商品列表 -->
+<script type="text/javascript">
+	new Vue({
+			el:'#box',
+			data:{
+				json:{
+					list:[
+						{
+							src:'images/1.jpg',
+							des:'书名1',
+							price:1
+						},
+						{
+							src:'images/1.jpg',
+							des:'书名2',
+							price:13
+						},
+						{
+							src:'images/1.jpg',
+							des:'书名3',
+							price:34
+						},
+						{
+							src:'images/1.jpg',
+							des:'书名4',
+							price:43
+						},
+						{
+							src:'images/1.jpg',
+							des:'书名5',
+							price:22
+						},
+						{
+							src:'images/1.jpg',
+							des:'书名6',
+							price:67
+						}
+					]
+				}
+			}
+		})
+</script>
+
+
+</body>
+</html>
