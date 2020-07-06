@@ -1,4 +1,4 @@
-
+﻿
 <!doctype html>
 <html  lang="en">
 
@@ -45,6 +45,9 @@
         <![endif]-->
 <!--	vue	-->
 		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
+		<script src="https://cdn.staticfile.org/axios/0.18.0/axios.min.js"></script>
 
     </head>
 	
@@ -66,61 +69,39 @@
 								<form action="signin.html">
 									<div class="form-group">
 									    <label for="signin_form">账号</label>
-									    <input type="email" class="form-control" id="signin_form" placeholder="输入账号">
+									    <input v-model="user_id" type="email" class="form-control" id="signin_form" placeholder="输入账号">
 									</div><!--/.form-group -->
 									<div class="form-group">
 										<label for="signin_form">密码</label>
-									    <input type="password" class="form-control" id="signin_form" placeholder="输入密码">
+									    <input v-model="password" type="password" class="form-control" id="signin_form" placeholder="输入密码">
 									</div><!--/.form-group -->
 								</form><!--/form -->
 							</div><!--/.signin-form -->
-							<div id="app1">
+							<div id="message">
 								<div v-if="type === 'A'">
-      请输入账号和密码
-    </div>
-    <div v-else-if="type === 'B'">
-      密码错误
-    </div>
-    <div v-else-if="type === 'C'">
-      账号不存在
-    </div>
-    <div v-else>
+								  请输入账号和密码
+								</div>
+								<div v-else-if="type === 'B'">
+								  密码错误
+								</div>
+								<div v-else-if="type === 'C'">
+								  账号不存在
+								</div>
+								<div v-else>
 
-    </div>
-								<p v-if="seen">{{ message }}</p>
-</div>
+								</div>
+<!--								<p v-if="seen">{{ message }}</p>-->
+							</div>
 						</div><!--/.col -->
 					</div><!--/.row -->
-					
-<!--					<div class="row">-->
-<!--						<div class="col-sm-12">-->
-<!--							<div class="signin-password">-->
-<!--								<div class="awesome-checkbox-list">-->
-<!--									<ul class="unstyled centered">-->
-
-<!--										<li>-->
-<!--										    <input class="styled-checkbox" id="styled-checkbox-2" type="checkbox" value="value2">-->
-<!--										    <label for="styled-checkbox-2">remember password</label>-->
-<!--										</li>-->
-
-<!--										<li>-->
-<!--										    <a href="#">Forgot email or password ?</a>-->
-<!--										</li>-->
-
-<!--									</ul>-->
-<!--								</div>&lt;!&ndash;/.awesome-checkbox-list &ndash;&gt;-->
-<!--							</div>&lt;!&ndash;/.signin-password &ndash;&gt;-->
-<!--						</div>&lt;!&ndash;/.col &ndash;&gt;-->
-<!--					</div>&lt;!&ndash;/.row &ndash;&gt;-->
 
 					<div class="row">
 						<div class="col-sm-12">
 							<div class="signin-footer">
-								<button type="button" class="btn signin_btn" data-toggle="modal" data-target=".signin_modal" v-on:click="reverseMessage">
+								<button type="button" class="btn signin_btn" data-toggle="modal" data-target=".signin_modal" v-on:click="signin">
 								登&nbsp;&nbsp;录
 								</button>
-								<p>
-									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;没有账号?
+								<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;没有账号?
 									<a href="注册.html">&nbsp;&nbsp;注册</a>
 								</p>
 							</div><!--/.signin-footer -->
@@ -150,21 +131,93 @@
 
 <!--		<script src="https://unpkg.com/vue"></script>-->
 		<script>
-			var app = new Vue({
+		//window.onload = function(){
+    //var vm = new Vue({
+       // el:'#app',
+      //  data:{
+       //     user_id: "",
+        //    password: "",
+        //    type: ""
+        //},
+       // methods:{
+       //     post:function(){
+       //         alert(this.user_id+this.password);
+       //         //发送 post 请求
+       //         this.$http.signin('http://124.70.51.104:8080/login',{user_id:this.user_id,password:this.password},{emulateJSON:true}).then(function(res){
+       //             alert(res.body);
+       //         },function(res){
+       //             console.log(res.status);
+       //         });
+       //     }
+       // }
+    //});
+//}
+		</script>
+	<script>
+	   var app = new Vue({
 			  el: '#app',
 			  data: {
-				//message: 'Hello Vue!',
-				//seen: true,
+				user_id: "",
+				password: "",
 				type: ""
 			  },
-			   methods: {
-				reverseMessage: function () {
-				this.type ="C"
-				  //this.message = this.message.split('').reverse().join('')
+			  methods: {
+				signin: function () {
+				    console.log(this.user_id+" "+this.password);
+				    if (this.user_id=="" || this.password=="") {
+						    alert("请输入名称和密码！");
+						    //this.type="A";
+						    }
+                    else {
+                        const params = new URLSearchParams();
+                        params.append('user_id', this.user_id);
+                        params.append('password', this.password);
+                        var n = { 'user_id': this.user_id, 'password': this.password };
+                        //var data = JSON.stringify(n);
+                        //var data =Qs.stringify(n);
+                        console.log(n);
+                        console.log(params);
+                        axios.post('http://124.70.51.104:8080/login',
+                            params,
+                        //{
+					    //params: {
+					    //user_id: this.user_id,
+					    //password: this.password
+					    //}
+                        //},
+                        //{
+                        //    headers: {
+                        //        'Content-Type':
+                        //            'text/plain'
+                            //'application/x-www-form-urlencoded'
+                       //         'application/json'
+                        //        }
+                       // }
+                        )
+                        .then(
+                            function (res) {
+                                console.log(res);
+                                if (res.data.code == 1) {
+                                    alert("登陆成功");
+                                    console.log("登陆成功");
+                                }else{
+                                    alert("登陆验证失败");
+                                    console.log("登陆验证失败");
+                                }
+					          //vm.answer = _.capitalize(response.data.answer)
+                            }
+                        )
+				        .catch(function (error) {
+                            console.log(error);
+				           alert("登录失败！");
+				          //vm.answer = 'Error! Could not reach the API. ' + error
+					           })
+				    }
 				}
 			  }
-			})
-		</script>
+		})
+	</script>
+
 
 
     </body>
