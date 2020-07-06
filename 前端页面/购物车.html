@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>首页</title>
+
+<link rel="stylesheet" href="css/base.css" />
+<link rel="stylesheet" href="css/layout.css"/>
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery.SuperSlide.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/vue.min.js"></script>
+</head>
+<body>
+
+<div id="wrapper">
+
+	<header id="header">
+	
+		<div id="loginBar">
+			<div class="w960 tr">
+				<a href="#">登录</a> <span class="sp">|</span> <a href="#">注册</a>
+			</div>
+		</div>
+		
+		<!-- <div id="headBox">
+			<div class="w960 oh">
+				<a href="#" class="fl mt10">住宅专项维修资金综合管理平台</a>
+				<nav id="navs" class="fr">
+				<a href="#">当前页面</a>
+				<a class="active" href="#">返回</a>
+				</nav>
+			</div>
+		</div> -->
+		<div class="head-v3" id="index">
+			<div class="navigation-up">
+					<div class="navigation-v3">
+						<ul>
+							<ul>
+								<!-- 默认被选中项 -->
+								<li :class="i.id == 1 ? 'nav-up-selected-inpage' : ''" v-for="i in nevigatelist" :_t_nav="i.nav">
+									<h2>
+										<a href="#">{{i.label}}</a>
+									</h2>
+								</li>
+							</ul>
+						</ul>
+					</div>
+			</div>
+			<div class="navigation-down">
+				<div v-for="i in navdetails" :id="i.id" :class="i.id == 'product' ? ['nav-down-menu','menu-1'] : ['nav-down-menu','menu-3','menu-1']" style="display: none;" :_t_nav="i.id">
+					<div class="navigation-down-inner">
+						<dl v-for="item in i.childrenlist" :style="item.id == '1' ? {'margin-left': i.leftlength}:''">
+							<dt v-if="item.label !=''">{{item.label}}</dt>
+							<dd v-for="y in item.hreflist">
+								<a class="link" href="#">{{y.label}}</a>
+							</dd>
+						</dl>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+
+
+	</header><!-- // header end --> 
+	
+	<div class="container w960 mt20">
+	<!--------上-------->
+		<!-- <div id="processor" >
+			<h1>图书分类</h1>
+			<p>
+			
+			</p>
+		</div>
+		<div id="processor" >
+			<h1>Top 10</h1>
+			<p>
+			
+			</p>
+		</div> -->
+		
+		<!----------商品列表---------->
+		<div class="index_focus">
+			<div id="app">
+				<h3>商品总数：{{length}}</h3>
+				<div class="biaoti" >
+					<ul  >
+						
+						<li> <input type="checkbox" id="sure" v-model="fv" @click="sd"  ><label for="checkbox">全选</label></li>
+						<li>商品</li>
+						<li>单价</li>
+						<li>数量</li>
+						<li>小计</li>
+						<li>操作</li>
+					</ul>
+				</div>
+				<div class="liebiao" id="list">
+					<ul id="fff" class="et"  v-for="(e,index) in we">
+						<li> <input type="checkbox" id="be" v-model="e.checked" @click="wq(index)"></li>
+									  
+						<li><img :src="e.url"/></li>
+						<li>{{e.message}}</li>
+						<li>{{e.price}}</li>
+						<li><button v-on:click="subtract(index)">-</button>
+							<input type="text" value="0" size="1" id="ef" v-model="e.num">
+							<button v-on:click="add(index)">+</button>
+						</li>
+						<li>{{wer(index)}}</li>
+						<li @click="fun(index)">删除</li>
+						
+					</ul>
+				   
+				   <div v-if="!we.length">当前没有商品，请添加商品。</div>
+				   <div id="aq"  :class={ghj:but}>
+						<span > 已选择{{sde()}}件商品</span>  <span class="weq">合计{{wry()}}</span> <button  @click="ed">清空购物车</button>
+				   </div>
+					
+				</div>
+			</div>
+		
+		</div>
+
+	</div>   <!-- // container end -->
+
+	<footer id="footer" class="w960 oh">
+		<span class="fl">底部底部</span>
+		<nav class="footNavs tr fr">
+			<a href="#">底部</a>
+			<span class="sp">|</span>
+			<a href="#">底部</a>
+		</nav>
+	</footer><!-- // footer end -->
+	
+</div><!-- // wrapper end -->
+<style>
+
+</style>
+
+<!-- 顶部导航栏 -->
+<script type="text/javascript">
+	jQuery(document).ready(function() {
+		var qcloud = {};
+		$('[_t_nav]').hover(function() {
+			var _nav = $(this).attr('_t_nav');
+			clearTimeout(qcloud[_nav + '_timer']);
+			qcloud[_nav + '_timer'] = setTimeout(function() {
+				$('[_t_nav]').each(function() {
+					$(this)[_nav == $(this).attr('_t_nav') ? 'addClass' : 'removeClass']('nav-up-selected');
+				});
+				$('#' + _nav).stop(true, true).slideDown(200);
+			}, 150);
+		}, function() {
+			var _nav = $(this).attr('_t_nav');
+			clearTimeout(qcloud[_nav + '_timer']);
+			qcloud[_nav + '_timer'] = setTimeout(function() {
+				$('[_t_nav]').removeClass('nav-up-selected');
+				$('#' + _nav).stop(true, true).slideUp(200);
+			}, 150);
+		});
+	});
+
+	new Vue({
+		el: "#index",
+		data: {
+			/* 导航标题 */
+			nevigatelist: [{
+				id: '1',
+				nav: 'home',
+				label: '首页',
+			},  {
+				id: '2',
+				nav: 'tsfl',
+				label: '图书分类',
+			}, {
+				id: '3',
+				nav: 'grzl',
+				label: '个人资料',
+			}, {
+				id: '4',
+				nav: 'ddgl',
+				label: '订单管理',
+			}, {
+				id: '5',
+				nav: 'support',
+				label: '购物车',
+			}, ],
+			/* 导航内明细列表 */
+			navdetails: [
+			    {
+					id: 'tsfl',
+					leftlength : '120px',
+					childrenlist: [{
+							id: '1',
+							/* 列表标题 */
+							label: '',
+							/* 标题下内容列表 */
+							hreflist: [{
+								label: '文艺',
+								href: '#',
+							}, ]
+						},{
+							id: '2',
+							/* 列表标题 */
+							label: '',
+							/* 标题下内容列表 */
+							hreflist: [{
+								label: '教育',
+								href: '#',
+							}, ]
+						},{
+							id: '3',
+							/* 列表标题 */
+							label: '',
+							/* 标题下内容列表 */
+							hreflist: [{
+								label: '人文社科',
+								href: '#',
+							}, ]
+						},{
+							id: '4',
+							/* 列表标题 */
+							label: '',
+							/* 标题下内容列表 */
+							hreflist: [{
+								label: '励志',
+								href: '#',
+							}, ]
+						},
+						{
+							id: '5',
+							/* 列表标题 */
+							label: '',
+							/* 标题下内容列表 */
+							hreflist: [{
+								label: '生活',
+								href: '#',
+							}, ]
+						},
+						{
+							id: '6',
+							/* 列表标题 */
+							label: '',
+							/* 标题下内容列表 */
+							hreflist: [{
+								label: '经营',
+								href: '#',
+							}, ]
+						},
+						{
+							id: '7',
+							/* 列表标题 */
+							label: '',
+							/* 标题下内容列表 */
+							hreflist: [{
+								label: '科技',
+								href: '#',
+							}, ]
+						},
+						{
+							id: '8',
+							/* 列表标题 */
+							label: '',
+							/* 标题下内容列表 */
+							hreflist: [{
+								label: '期刊',
+								href: '#',
+							}, ]
+						},
+					]
+				},
+				// {
+				// 	id: 'grzl',
+				// 	leftlength : '235px',
+				// 	childrenlist: [{
+				// 			id: '1',
+				// 			/* 列表标题 */
+				// 			label: '',
+				// 			/* 标题下内容列表 */
+				// 			hreflist: [{
+				// 				label: '微信',
+				// 				href: '#',
+				// 			}, ]
+				// 		},{
+				// 			id: '2',
+				// 			/* 列表标题 */
+				// 			label: '',
+				// 			/* 标题下内容列表 */
+				// 			hreflist: [{
+				// 				label: '游戏',
+				// 				href: '#',
+				// 			}, ]
+				// 		},{
+				// 			id: '3',
+				// 			/* 列表标题 */
+				// 			label: '',
+				// 			/* 标题下内容列表 */
+				// 			hreflist: [{
+				// 				label: '移动应用',
+				// 				href: '#',
+				// 			}, ]
+				// 		},
+				// 	]
+				// },{
+				// 	id:'cooperate',
+				// 	leftlength : '480px',
+				// 	childrenlist:[
+				// 		{
+				// 			id: '1',
+				// 			/* 列表标题 */
+				// 			label: '',
+				// 			/* 标题下内容列表 */
+				// 			hreflist: [{
+				// 				label: '代理商',
+				// 				href: '#',
+				// 			}, ]
+				// 		},{
+				// 			id: '2',
+				// 			/* 列表标题 */
+				// 			label: '',
+				// 			/* 标题下内容列表 */
+				// 			hreflist: [{
+				// 				label: '微信服务商',
+				// 				href: '#',
+				// 			}, ]
+				// 		},{
+				// 			id: '3',
+				// 			/* 列表标题 */
+				// 			label: '',
+				// 			/* 标题下内容列表 */
+				// 			hreflist: [{
+				// 				label: '创投机构',
+				// 				href: '#',
+				// 			}, ]
+				// 		},
+				// 	],
+				// }
+			],
+		},
+		mounted: function() {
+
+		},
+		methods: {
+
+		}
+	})
+</script>
+<!-- 商品列表 -->
+<!-- <script type="text/javascript">
+	new Vue({
+			el:'#box',
+			data:{
+				json:{
+					list:[
+						{
+							src:'images/1.jpg',
+							des:'书名1',
+							price:1
+						},
+						{
+							src:'images/1.jpg',
+							des:'书名2',
+							price:13
+						},
+						{
+							src:'images/1.jpg',
+							des:'书名3',
+							price:34
+						},
+						{
+							src:'images/1.jpg',
+							des:'书名4',
+							price:43
+						},
+						{
+							src:'images/1.jpg',
+							des:'书名5',
+							price:22
+						},
+						{
+							src:'images/1.jpg',
+							des:'书名6',
+							price:67
+						}
+					]
+				}
+			}
+		})
+</script> -->
+<script type="text/javascript">
+var we = new Vue({
+	el:"#app",
+	data:{
+        fv:false,
+		arr:[],
+		et:"df",
+        bb:"",
+		ws:"",
+		wert:0,
+	    er:"",
+		but:false,
+		we:[
+		{url:"./img/5adef3e6N3b3d085a.jpg",message:"商品1",price:32.90,num:0,checked:false},
+		{url:"./img/5b6299fdNa2588a6a.jpg",message:"商品2",price:109.00,num:0,checked:false},
+		{url:"./img/5b779a23N8e4604a5.jpg",message:"商品3",price:59.90,num:0,checked:false},
+		{url:"./img/5b7cb4b6Nce1debe2.jpg",message:"商品4",price:37.90,num:0,checked:false},
+		{url:"./img/5bc040b3N96bdc3cd.jpg",message:"商品5",price:19.90,num:0,checked:false}
+		]
+	},methods:{
+		ed:function(){
+			this.we="";
+			this.but=true;
+			this.fv=false;
+			document.getElementById("sure").disabled="disabled";
+
+		},
+		add:function(e){
+			this.we[e].num++;
+
+
+		},
+		subtract:function(e){
+			if (this.we[e].num<=0){
+				alert('商品已是最小数量')
+				this.count=0;
+			}else {
+				this.we[e].num-=1;
+			}
+		},
+		wq:function(e){
+			//点击方框
+			//console.log(this.we[e].checked)
+			var  arrs=[];
+			this.we[e].checked=!this.we[e].checked
+			if(this.we[e].checked){
+				document.getElementById("list").getElementsByClassName("et")[e].style.backgroundColor="red";
+
+			}else{
+				document.getElementById("list").getElementsByClassName("et")[e].style.backgroundColor="";
+				//this.fv=false;
+			}
+			for (var i = 0;i<this.we.length;i++){
+
+				arrs.push(this.we[i].checked);
+
+			}
+			if(arrs.indexOf(false)==-1){
+				this.fv=true
+
+			}else{
+				this.fv=false
+			}
+
+		},
+
+		fun:function(e){
+			var  arrs=[];
+		   this.ws=e;
+			//console.log(this.ws==0)
+			//删除
+
+           if(this.ws !==(this.we.length-1)){
+			   this.we[this.ws].checked== this.we[this.ws+1].checked;
+
+		   }else{
+
+		   }
+			this.we.splice(e,1)
+			for (var i = 0;i<this.we.length;i++){
+
+				arrs.push(this.we[i].checked);
+
+			}
+			if(arrs.indexOf(false)==-1){
+				this.fv=true
+			}else{
+				this.fv=false
+			}
+			for(var i=0;i<this.we.length;i++){
+				if(this.we[i].checked){
+					document.getElementById("list").getElementsByClassName("et")[i].style.backgroundColor="red";
+				}else{
+					document.getElementById("list").getElementsByClassName("et")[i].style.backgroundColor="";
+				}
+			}
+
+			if(this.we==""){
+				//this.ert=true;
+				this.but=true;
+				this.fv=false;
+				document.getElementById("sure").disabled="disabled";
+
+
+			}
+
+
+		},
+		sd:function(){
+			console.log(this.we.length)
+			if(this.fv){
+				for(var i =0;i<this.we.length;i++){
+					this.we[i].checked=false
+					document.getElementById("list").getElementsByClassName("et")[i].style.backgroundColor="";
+				}
+
+			}else{
+				for(var i =0;i<this.we.length;i++){
+					console.log(i)
+
+					this.we[i].checked=true
+					this.fv=true;
+					document.getElementById("list").getElementsByClassName("et")[i].style.backgroundColor="red";
+				}
+			}
+		},
+		wer:function(index){
+			//this.sxc(index);
+		//	console.log(Math.floor(this.we[index].price*Number(this.we[index].num)))
+			return Math.floor(this.we[index].price*Number(this.we[index].num));
+
+		},
+
+		sde:function(){
+			var  total=0;
+			for(var i=0;i<this.we.length;i++){
+				if(this.we[i].checked){
+					total+=parseInt(this.we[i].num);
+				}
+			}
+           return total;
+         },
+		wry:function(){
+			var  totall=0;
+			for(var i=0;i<this.we.length;i++){
+				if(this.we[i].checked){
+					totall+=parseInt(this.we[i].num*this.we[i].price);
+				}
+			}
+			return totall;
+		}
+
+
+
+	},computed:{
+		length:function(){
+			return this.we.length;
+		}
+
+		
+	},mounted:function() {
+		/*for (var i = 0; i < this.we.length; i++) {
+			this.arr.push(this.we[i].checked);
+			console.log(this.arr[0]);
+		}*/
+		/*for (var i = 0;i<this.we.length;i++){
+			var  arrs=[];
+			arrs.push(this.we[i].checked);
+			console.log(arrs)
+		}*/
+	}
+})
+</script>
+
+</body>
+</html>
