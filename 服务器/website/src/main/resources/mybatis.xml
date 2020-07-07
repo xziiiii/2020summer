@@ -19,5 +19,7 @@
     <mappers>
         <mapper class="edu.bjtu.summer.mapper.UserMapper"/>
         <mapper class="edu.bjtu.summer.mapper.RoleMapper"/>
+        <mapper class="edu.bjtu.summer.mapper.PrivilegeMapper"/>
+        <mapper class="edu.bjtu.summer.mapper.StoreMapper"/>
     </mappers>
 </configuration>
