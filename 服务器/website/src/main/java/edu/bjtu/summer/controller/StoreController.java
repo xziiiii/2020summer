@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/admin", method = RequestMethod.POST)
+@RequestMapping(method = RequestMethod.POST)
 public class StoreController {
 
     private StoreService storeService = new StoreService();
 
-    @RequestMapping("/getStoreListWithLimit")
+    @RequestMapping("/admin/getStoreListWithLimit")
     public JsonTemplate getStoreListWithLimit(@RequestParam(value = "left", required = false) String left,
                                               @RequestParam(value = "right", required = false) String right){
         if (left == null || left.equals("") || right == null || right.equals("")){
@@ -28,7 +28,21 @@ public class StoreController {
         return jsonTemplate;
     }
 
-    @RequestMapping("/addStore")
+    @RequestMapping("/store/getStoreList")
+    public JsonTemplate getStoreList(@RequestParam(value = "user_id", required = false) String user_id){
+        if (user_id == null || user_id.equals("")){
+            return new JsonTemplate(0);
+        }
+
+        List<Store> storeList = storeService.getStoreListByManagerId(Integer.parseInt(user_id));
+        JsonTemplate jsonTemplate = new JsonTemplate(1);
+        jsonTemplate.addData("store_list", storeList);
+        jsonTemplate.addData("list_size", storeList.size());
+
+        return jsonTemplate;
+    }
+
+    @RequestMapping("/admin/addStore")
     public JsonTemplate addStore(@RequestBody Store store){
         int store_id  = storeService.addStore(store);
 
@@ -41,7 +55,7 @@ public class StoreController {
         }
     }
 
-    @RequestMapping("/updateStoreInfo")
+    @RequestMapping("/admin/updateStoreInfo")
     public JsonTemplate updateStore(@RequestBody Store store){
         if (storeService.updateStore(store)){
             return new JsonTemplate(1);
@@ -50,7 +64,7 @@ public class StoreController {
         }
     }
 
-    @RequestMapping("/deleteStore")
+    @RequestMapping("/admin/deleteStore")
     public JsonTemplate deleteStore(@RequestParam(value = "store_id", required = false) String store_id){
         if (store_id == null || store_id.equals("")){
             return new JsonTemplate(0);

@@ -16,6 +16,13 @@ public class StoreService {
         return storeMapper.getStoreListWithLimit(left, right);
     }
 
+    public List<Store> getStoreListByManagerId(int manager_id){
+        SqlSession sqlSession = MybatisUtil.getSession();
+        StoreMapper storeMapper = sqlSession.getMapper(StoreMapper.class);
+
+        return storeMapper.getStoreListByManagerId(manager_id);
+    }
+
     public int addStore(Store store){
         SqlSession sqlSession = MybatisUtil.getSession();
         StoreMapper storeMapper = sqlSession.getMapper(StoreMapper.class);

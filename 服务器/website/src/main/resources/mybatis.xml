@@ -21,5 +21,6 @@
         <mapper class="edu.bjtu.summer.mapper.RoleMapper"/>
         <mapper class="edu.bjtu.summer.mapper.PrivilegeMapper"/>
         <mapper class="edu.bjtu.summer.mapper.StoreMapper"/>
+        <mapper class="edu.bjtu.summer.mapper.BookMapper"/>
     </mappers>
 </configuration>

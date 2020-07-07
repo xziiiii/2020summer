@@ -10,6 +10,9 @@ public interface StoreMapper {
     @Select("SELECT * FROM store LIMIT #{left}, #{right}")
     List<Store> getStoreListWithLimit(@Param("left") int left, @Param("right") int right);
 
+    @Select("SELECT * FROM store WHERE store_manager_id = #{store_manager_id}")
+    List<Store> getStoreListByManagerId(int store_manager_id);
+
     @Select("SELECT MAX(store_id) FROM store")
     int getMaxStoreId();
 
