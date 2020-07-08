@@ -22,7 +22,7 @@ public interface UserMapper {
             "#{zip_code}, #{location}, #{age}, #{country}, #{detail_address}, #{identity}, #{code})")
     boolean insertUser(User user);
 
-    @Update("UPDATE user SET nickname=#{nickname}, password=#{password}, gender=#{gender}," +
+    @Update("UPDATE user SET username=#{username}, nickname=#{nickname}, password=#{password}, gender=#{gender}," +
             "email=#{email}, phone=#{phone}, zip_code=#{zip_code}, location=#{location}," +
             "age=#{age}, country=#{country}, detail_address=#{detail_address}, identity=#{identity}," +
             "code=#{code} WHERE user_id=#{user_id}")
