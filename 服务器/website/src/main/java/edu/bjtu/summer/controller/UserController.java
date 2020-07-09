@@ -54,6 +54,11 @@ public class UserController {
             return new JsonTemplate(0);
         }
 
+        Role role = roleService.getRoleByUserId(user_id);
+        if (role.getRole_id() != 3){
+            return new JsonTemplate(0);
+        }
+
         return new JsonTemplate(1);
     }
 
@@ -70,6 +75,8 @@ public class UserController {
 
         int user_id = userService.addUser(user);
         if (user_id != -1){
+            userService.setUserRole(user_id, 3);
+
             JsonTemplate jsonTemplate = new JsonTemplate(1);
             jsonTemplate.addData("user_id", user_id);
             return jsonTemplate;
