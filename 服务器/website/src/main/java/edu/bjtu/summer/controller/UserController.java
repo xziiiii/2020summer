@@ -85,6 +85,49 @@ public class UserController {
         }
     }
 
+    @RequestMapping(value = "/customer/login", method = RequestMethod.POST)
+    public JsonTemplate customerLogin(@RequestParam(value = "user_id", required = false) String userId,
+                                   @RequestParam(value = "password", required = false) String password) {
+        if (userId == null || userId.equals("") || password == null || password.equals("")) {
+            return new JsonTemplate(0);
+        }
+
+        int user_id = Integer.parseInt(userId);
+        if (!userService.judgeLogin(user_id, password)) {
+            return new JsonTemplate(0);
+        }
+
+        Role role = roleService.getRoleByUserId(user_id);
+        if (role.getRole_id() != 2){
+            return new JsonTemplate(0);
+        }
+
+        return new JsonTemplate(1);
+    }
+
+    @RequestMapping(value = "/customer/register", method = RequestMethod.POST)
+    public JsonTemplate customerRegister(@RequestParam(value = "username", required = false) String username,
+                                      @RequestParam(value = "password", required = false) String password){
+        if (username == null || username.equals("") || password == null || password.equals("")){
+            return new JsonTemplate(0);
+        }
+
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(password);
+
+        int user_id = userService.addUser(user);
+        if (user_id != -1){
+            userService.setUserRole(user_id, 2);
+
+            JsonTemplate jsonTemplate = new JsonTemplate(1);
+            jsonTemplate.addData("user_id", user_id);
+            return jsonTemplate;
+        }else {
+            return new JsonTemplate(0);
+        }
+    }
+
 
     @RequestMapping(value = "/admin/addUser", method = RequestMethod.POST)
     public JsonTemplate addUser(@RequestBody User user) {

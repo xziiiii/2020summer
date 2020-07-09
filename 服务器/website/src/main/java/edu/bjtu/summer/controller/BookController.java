@@ -1,6 +1,7 @@
 package edu.bjtu.summer.controller;
 
 import edu.bjtu.summer.model.Book;
+import edu.bjtu.summer.model.BookCategory;
 import edu.bjtu.summer.service.BookService;
 import edu.bjtu.summer.util.JsonTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -57,5 +58,34 @@ public class BookController {
         }else{
             return new JsonTemplate(0);
         }
+    }
+
+    @RequestMapping("/getBookCategoryList")
+    public JsonTemplate getBookCategoryList(){
+        JsonTemplate jsonTemplate = new JsonTemplate(1);
+
+        List<BookCategory> categoryList = bookService.getBookCategoryList();
+        jsonTemplate.addData("category_list", categoryList);
+        jsonTemplate.addData("list_size", categoryList.size());
+
+        return jsonTemplate;
+    }
+
+    @RequestMapping("/getCategoryBookListWithLimit")
+    public JsonTemplate getCategoryBookListWithLimit(@RequestParam(required = false) String cate_id,
+                                                     @RequestParam(required = false) String left,
+                                                     @RequestParam(required = false) String right){
+        if (cate_id == null || cate_id.equals("")
+                || left == null || left.equals("") || right == null || right.equals("")){
+            return new JsonTemplate(0);
+        }
+
+        JsonTemplate jsonTemplate = new JsonTemplate(1);
+        List<Book> bookList = bookService.getCategoryBookListWithLimit(Integer.parseInt(cate_id),
+                Integer.parseInt(left), Integer.parseInt(right));
+        jsonTemplate.addData("book_list", bookList);
+        jsonTemplate.addData("list_size", bookList.size());
+
+        return jsonTemplate;
     }
 }

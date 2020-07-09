@@ -2,6 +2,7 @@ package edu.bjtu.summer.service;
 
 import edu.bjtu.summer.mapper.BookMapper;
 import edu.bjtu.summer.model.Book;
+import edu.bjtu.summer.model.BookCategory;
 import edu.bjtu.summer.util.MybatisUtil;
 import org.apache.ibatis.session.SqlSession;
 
@@ -39,5 +40,19 @@ public class BookService {
         BookMapper bookMapper = sqlSession.getMapper(BookMapper.class);
 
         return bookMapper.deleteBook(book_id);
+    }
+
+    public List<BookCategory> getBookCategoryList(){
+        SqlSession sqlSession = MybatisUtil.getSession();
+        BookMapper bookMapper = sqlSession.getMapper(BookMapper.class);
+
+        return bookMapper.getBookCategoryList();
+    }
+
+    public List<Book> getCategoryBookListWithLimit(int cate_id, int left, int right){
+        SqlSession sqlSession = MybatisUtil.getSession();
+        BookMapper bookMapper = sqlSession.getMapper(BookMapper.class);
+
+        return bookMapper.getBookListByCategoryIdWithLimit(cate_id, left, right);
     }
 }

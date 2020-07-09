@@ -1,6 +1,7 @@
 package edu.bjtu.summer.mapper;
 
 import edu.bjtu.summer.model.Book;
+import edu.bjtu.summer.model.BookCategory;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
@@ -30,4 +31,12 @@ public interface BookMapper {
 
     @Delete("DELETE FROM book_info WHERE book_id = #{book_id}")
     boolean deleteBook(long book_id);
+
+    @Select("SELECT * FROM book_category")
+    List<BookCategory> getBookCategoryList();
+
+    @Select("SELECT * FROM book_info WHERE book_category_id=#{cate_id} " +
+            "LIMIT #{left}, #{right}")
+    List<Book> getBookListByCategoryIdWithLimit(@Param("cate_id") int cate_id,
+                                                @Param("left") int left, @Param("right") int right);
 }
