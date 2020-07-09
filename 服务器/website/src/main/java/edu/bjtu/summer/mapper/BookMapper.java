@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Map;
 
 public interface BookMapper {
 
@@ -39,4 +40,21 @@ public interface BookMapper {
             "LIMIT #{left}, #{right}")
     List<Book> getBookListByCategoryIdWithLimit(@Param("cate_id") int cate_id,
                                                 @Param("left") int left, @Param("right") int right);
+
+    @Select("SELECT * FROM book_info " +
+            "WHERE name LIKE CONCAT('%', #{keyword},'%') OR author LIKE CONCAT('%', #{keyword},'%') " +
+            "LIMIT #{left}, #{right}")
+    List<Book> getBookListByKeywordWithLimit(@Param("keyword") String keyword,
+                                             @Param("left") int left, @Param("right") int right);
+
+    @Select("SELECT COUNT(*) as number, AVG(score) as rating " +
+            "FROM bx_book_ratings WHERE bookid = #{book_id}")
+    Map<String, String> getBookAverageRating(@Param("book_id") long book_id);
+
+    @Select("SELECT b.book_id, b.name, b.author, b.image_url, r.number, r.rating " +
+            "FROM book_info b, " +
+            "(SELECT bookid, COUNT(*) AS number, AVG(score) as rating FROM bx_book_ratings " +
+            " GROUP BY bookid HAVING number >= 10 ORDER BY rating DESC LIMIT #{left}, #{right}) as r " +
+            "WHERE b.book_id = r.bookid")
+    List<Map<String, String>> getBookRankListByRatingWithLimit(@Param("left") int left, @Param("right") int right);
 }

@@ -7,12 +7,13 @@ import edu.bjtu.summer.util.JsonTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/book/", method = RequestMethod.POST)
 public class BookController {
 
-    BookService bookService = new BookService();
+    private BookService bookService = new BookService();
 
     @RequestMapping("/addBook")
     public JsonTemplate addBook(@RequestBody Book book){
@@ -85,6 +86,54 @@ public class BookController {
                 Integer.parseInt(left), Integer.parseInt(right));
         jsonTemplate.addData("book_list", bookList);
         jsonTemplate.addData("list_size", bookList.size());
+
+        return jsonTemplate;
+    }
+
+    @RequestMapping("/getBookListByKeywordWithLimit")
+    public JsonTemplate getBookListByKeywordWithLimit(@RequestParam(required = false) String keyword,
+                                                      @RequestParam(required = false) String left,
+                                                      @RequestParam(required = false) String right){
+        if (keyword == null || keyword.equals("")
+                || left == null || left.equals("") || right == null || right.equals("")){
+            return new JsonTemplate(0);
+        }
+
+        JsonTemplate jsonTemplate = new JsonTemplate(1);
+        List<Book> bookList = bookService.getBookListByKeywordWithLimit(keyword,
+                Integer.parseInt(left), Integer.parseInt(right));
+        jsonTemplate.addData("book_list", bookList);
+        jsonTemplate.addData("list_size", bookList.size());
+
+        return jsonTemplate;
+    }
+
+    @RequestMapping("/getBookAverageRating")
+    public JsonTemplate getBookRating(@RequestParam(required = false) String book_id){
+        if (book_id == null || book_id.equals("")){
+            return new JsonTemplate(0);
+        }
+
+        JsonTemplate jsonTemplate = new JsonTemplate(1);
+        Map<String, String> map = bookService.getBookAverageRating(Long.parseLong(book_id));
+        jsonTemplate.addData("avg_rating", map.get("rating"));
+        jsonTemplate.addData("number", map.get("number"));
+
+        return jsonTemplate;
+    }
+
+    @RequestMapping("/getBookRankListByRatingWithLimit")
+    public JsonTemplate getBookRankListByRatingWithLimit(@RequestParam(required = false) String left,
+                                                         @RequestParam(required = false) String right){
+        if (left == null || left.equals("") || right == null || right.equals("")){
+            return new JsonTemplate(0);
+        }
+
+        JsonTemplate jsonTemplate = new JsonTemplate(1);
+        List<Map<String, String>> mapList
+                = bookService.getBookRankListByRatingWithLimit(Integer.parseInt(left), Integer.parseInt(right));
+        jsonTemplate.addData("list_size", mapList.size());
+        jsonTemplate.addData("rank_list", mapList);
 
         return jsonTemplate;
     }

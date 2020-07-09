@@ -7,6 +7,7 @@ import edu.bjtu.summer.util.MybatisUtil;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.List;
+import java.util.Map;
 
 public class BookService {
 
@@ -54,5 +55,31 @@ public class BookService {
         BookMapper bookMapper = sqlSession.getMapper(BookMapper.class);
 
         return bookMapper.getBookListByCategoryIdWithLimit(cate_id, left, right);
+    }
+
+    public List<Book> getBookListByKeywordWithLimit(String keyword, int left, int right){
+        SqlSession sqlSession = MybatisUtil.getSession();
+        BookMapper bookMapper = sqlSession.getMapper(BookMapper.class);
+
+        return bookMapper.getBookListByKeywordWithLimit(keyword, left, right);
+    }
+
+    public Map<String, String> getBookAverageRating(long book_id){
+        SqlSession sqlSession = MybatisUtil.getSession();
+        BookMapper bookMapper = sqlSession.getMapper(BookMapper.class);
+
+        Map<String, String> map = bookMapper.getBookAverageRating(book_id);
+        if (!map.containsKey("rating")){
+            map.put("rating", "null");
+        }
+
+        return map;
+    }
+
+    public List<Map<String, String>> getBookRankListByRatingWithLimit(int left, int right){
+        SqlSession sqlSession = MybatisUtil.getSession();
+        BookMapper bookMapper = sqlSession.getMapper(BookMapper.class);
+
+        return bookMapper.getBookRankListByRatingWithLimit(left, right);
     }
 }

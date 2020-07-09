@@ -4,17 +4,17 @@ import edu.bjtu.summer.model.User;
 import edu.bjtu.summer.util.MybatisUtil;
 import org.apache.ibatis.session.SqlSession;
 
+import java.util.List;
+import java.util.Map;
+
 public class TestMapper {
 
     public static void main(String[] args) {
         SqlSession sqlSession = MybatisUtil.getSession();
-        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+        BookMapper bookMapper = sqlSession.getMapper(BookMapper.class);
 
-        User user = new User();
-        user.setNickname("123456");
-        userMapper.updateUser(user);
+        List<Map<String, String>> map = bookMapper.getBookRankListByRatingWithLimit(1, 5);
 
-        sqlSession.commit();
-        sqlSession.close();
+        System.out.println("");
     }
 }
