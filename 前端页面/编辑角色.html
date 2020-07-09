@@ -72,7 +72,7 @@
                     <label for="L_repass" class="layui-form-label">
                     </label>
                     <button v-on:click="editRole" class="layui-btn" lay-filter="add" lay-submit="">
-                        增加
+                        编辑
                     </button>
                 </div>
             </form>
@@ -102,13 +102,18 @@
                 //监听提交
                 form.on('submit(add)',
                     function (data) {
+                        if (!window.localStorage) {
+                            alert("浏览器不支持localstorage");
+                    } else {
+                        var storage = window.localStorage;
+                        var role_id = storage.getItem("role_id");
+                        console.log(role_id);
+                    }
 
                         console.log(data);
-
-
                         console.log(data.field);
                         var info = data.field;
-                        //info.user_id = user_id;
+                        info.role_id = role_id;
                         delete info.role;
                         delete info.repass;
                         var data = JSON.stringify(info);
@@ -116,7 +121,7 @@
                         console.log(data);
                         $.ajax({
                             type: "post",
-                            url: "http://119.3.179.137:8080/admin/addRole",
+                            url: "http://119.3.179.137:8080/admin/updateRoleInfo",
                             dataType: "json",
                             contentType: 'application/json;charset=UTF-8',
                             data: data,
@@ -124,29 +129,28 @@
                                 console.log(responseTxt);
                                 if (responseTxt.code == 1) {
                                     layer.msg("提交成功");
-                                    //关闭当前frame
-                                    //xadmin.close();
+                                    关闭当前frame
+                                    xadmin.close();
 
-                                    // 可以对父窗口进行刷新
-                                    //xadmin.father_reload();
+                                    可以对父窗口进行刷新
+                                    xadmin.father_reload();
                                 } else {
                                     layer.msg("提交出错");
                                 }
                             }
                         });
-
-
                         //发异步，把数据提交给php
-                        layer.alert("增加成功", {
+                        layer.alert("编辑成功", {
                             icon: 6
                         },
                             function () {
                                 //关闭当前frame
-                                // xadmin.close();
+                                 xadmin.close();
 
                                 // // 可以对父窗口进行刷新 
-                                // xadmin.father_reload();
-                            });
+                                 xadmin.father_reload();
+                            }
+                            );
                         return false;
                     });
 
@@ -180,6 +184,7 @@
                     //params.append('user_id', this.user_id);
                     //params.append('password', this.password);
                     var n = {
+                        'role_id': "111",
                         'name': this.name,
                         'code': this.code,
                         'description': this.description
@@ -189,7 +194,7 @@
                     console.log("vue");
                     console.log(n);
                     //console.log(params);
-                    axios.post('http://119.3.179.137:8080/admin/addRole',
+                    axios.post('http://119.3.179.137:8080/admin/updateRoleInfo',
                         params)
                         .then(
                             function (res) {
@@ -212,28 +217,28 @@
                 },
                 getParams() {
                     // 取到路由带过来的参数
-                    //console.log("接收参数");
-                    //if (!window.localStorage) {
-                    //    alert("浏览器不支持localstorage");
-                    //} else {
-                    //    var storage = window.localStorage;
-                    //    // console.log(this.$route.query);
-                    //    var user = storage.getItem("user_item");
-                    //    //console.log(user);
-                    //    var juser = JSON.parse(user);
-                    //    console.log(juser);
-                    //    this.username = juser.username;
-                    //    this.phone = juser.phone;
-                    //    this.select_gender = juser.gender;
-                    //    this.select_role = '';
-                    //    storage.setItem("user_id",juser.user_id);
-                    //    //const routerParams = this.$route.query.mallCode
-                    //    //// 将数据放在当前组件的数据内
-                    //    //this.mallInfo.searchMap.mallCode = routerParams;
-                    //    //this.keyupMallName()
-                    //}
+                    console.log("接收参数");
+                    if (!window.localStorage) {
+                        alert("浏览器不支持localstorage");
+                    } else {
+                        var storage = window.localStorage;
+                        // console.log(this.$route.query);
+                        var role = storage.getItem("role_item");
+                        //console.log(user);
+                        var jrole= JSON.parse(role);
+                        console.log(jrole);
+                        this.name = jrole.name;
+                        this.code = jrole.code;
+                        this.description = jrole.description;
+                        storage.setItem("role_id", jrole.role_id);
+                        //const routerParams = this.$route.query.mallCode
+                        //// 将数据放在当前组件的数据内
+                        //this.mallInfo.searchMap.mallCode = routerParams;
+                        //this.keyupMallName()
+                        //}
+                    }
                 }
-            },
+                },
             watch: {
                 '$route': 'getParams'
             },

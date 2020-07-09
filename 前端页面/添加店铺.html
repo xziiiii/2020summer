@@ -71,6 +71,7 @@
                     <div class="layui-input-inline">
                         <input type="text" v-model="store_telephone" id="store_telephone" name="store_telephone" autocomplete="off" class="layui-input">
                     </div>
+                </div>
 
 
 
@@ -100,7 +101,7 @@
                         console.log(data.field);
                         var info = data.field;
                         //info.user_id = user_id;
-                        delete info.role;
+                        delete info.store;
                         delete info.repass;
                         var data = JSON.stringify(info);
                         console.log(info);
@@ -165,7 +166,7 @@
             methods: {
                 getMakerList: function (e) {
                 },
-                editRole: function () {
+                editStore: function () {
                     var n = {
                         'store_phone_num': this.store_phone_num,
                         'store_telephone': this.store_telephone,

@@ -33,31 +33,36 @@
             <form class="layui-form">
                 <div class="layui-form-item">
                     <label for="username" class="layui-form-label">
-                        <span class="x-red">*</span>角色名
+                        <span class="x-red">*</span>店铺名称
                     </label>
                     <div class="layui-input-inline">
-                        <input type="text" v-model="name" id="name" name="name" required="" lay-verify="required"
-                            autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label for="username" class="layui-form-label">
-                        <span class="x-red">*</span>code
-                    </label>
-                    <div class="layui-input-inline">
-                        <input type="text" v-model="code" id="code" name="code" required="" lay-verify="required"
-                            autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label for="username" class="layui-form-label">
-                        <span class="x-red">*</span>描述
-                    </label>
-                    <div class="layui-input-inline">
-                        <input type="text" v-model="description" id="description" name="description" required=""
+                        <input type="text" v-model="store_name" id="store_name" name="store_name" required=""
                             lay-verify="required" autocomplete="off" class="layui-input">
                     </div>
-                    <div class="layui-form-mid layui-word-aux">简单描述角色的权限
+                </div>
+                <div class="layui-form-item">
+                    <label for="username" class="layui-form-label">
+                        <span class="x-red">*</span>店铺位置
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="text" v-model="store_position" id="store_position" name="store_position" required=""
+                            lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="phone" class="layui-form-label">
+                        店铺电话
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="text" v-model="store_phone_num"  id="store_phone_num" name="store_phone_num"  autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="phone" class="layui-form-label">
+                        联系方式
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="text" v-model="store_telephone" id="store_telephone" name="store_telephone" autocomplete="off" class="layui-input">
                     </div>
                 </div>
 
@@ -71,8 +76,8 @@
                 <div class="layui-form-item">
                     <label for="L_repass" class="layui-form-label">
                     </label>
-                    <button v-on:click="editRole" class="layui-btn" lay-filter="add" lay-submit="">
-                        增加
+                    <button v-on:click="editStore" class="layui-btn" lay-filter="add" lay-submit="">
+                        编辑
                     </button>
                 </div>
             </form>
@@ -102,21 +107,26 @@
                 //监听提交
                 form.on('submit(add)',
                     function (data) {
+                        if (!window.localStorage) {
+                            alert("浏览器不支持localstorage");
+                    } else {
+                        var storage = window.localStorage;
+                        var store_id = storage.getItem("store_id");
+                        console.log(store_id);
+                    }
 
                         console.log(data);
-
-
                         console.log(data.field);
                         var info = data.field;
-                        //info.user_id = user_id;
-                        delete info.role;
+                        info.store_id = store_id;
+                        delete info.store;
                         delete info.repass;
                         var data = JSON.stringify(info);
                         console.log(info);
                         console.log(data);
                         $.ajax({
                             type: "post",
-                            url: "http://119.3.179.137:8080/admin/addRole",
+                            url: "http://119.3.179.137:8080/admin/updateStoreInfo",
                             dataType: "json",
                             contentType: 'application/json;charset=UTF-8',
                             data: data,
@@ -124,29 +134,28 @@
                                 console.log(responseTxt);
                                 if (responseTxt.code == 1) {
                                     layer.msg("提交成功");
-                                    //关闭当前frame
-                                    //xadmin.close();
+                                    关闭当前frame
+                                    xadmin.close();
 
-                                    // 可以对父窗口进行刷新
-                                    //xadmin.father_reload();
+                                    可以对父窗口进行刷新
+                                    xadmin.father_reload();
                                 } else {
                                     layer.msg("提交出错");
                                 }
                             }
                         });
-
-
                         //发异步，把数据提交给php
-                        layer.alert("增加成功", {
+                        layer.alert("编辑成功", {
                             icon: 6
                         },
                             function () {
                                 //关闭当前frame
-                                // xadmin.close();
+                                 xadmin.close();
 
                                 // // 可以对父窗口进行刷新 
-                                // xadmin.father_reload();
-                            });
+                                 xadmin.father_reload();
+                            }
+                            );
                         return false;
                     });
 
@@ -162,9 +171,10 @@
         var app = new Vue({
             el: '#app',
             data: {
-                name: "",
-                code: "",
-                description: ""
+                store_phone_num: "",
+                store_telephone: "",
+                store_name: "",
+                store_position: ""
             },
             created() {
                 this.getParams();
@@ -175,21 +185,24 @@
             methods: {
                 getMakerList: function (e) {
                 },
-                editRole: function () {
+                editStore: function () {
                     //const params = new URLSearchParams();
                     //params.append('user_id', this.user_id);
                     //params.append('password', this.password);
                     var n = {
-                        'name': this.name,
-                        'code': this.code,
-                        'description': this.description
+                        
+                        'store_id': "111",
+                        'store_phone_num': this.store_phone_num,
+                        'store_telephone': this.store_telephone,
+                        'store_name': this.store_name,
+                        'store_position': this.store_position
                     };
                     //var data = JSON.stringify(n);
                     //var data =Qs.stringify(n);
                     console.log("vue");
                     console.log(n);
                     //console.log(params);
-                    axios.post('http://119.3.179.137:8080/admin/addRole',
+                    axios.post('http://119.3.179.137:8080/admin/updateStoreInfo',
                         params)
                         .then(
                             function (res) {
@@ -212,92 +225,33 @@
                 },
                 getParams() {
                     // 取到路由带过来的参数
-                    //console.log("接收参数");
-                    //if (!window.localStorage) {
-                    //    alert("浏览器不支持localstorage");
-                    //} else {
-                    //    var storage = window.localStorage;
-                    //    // console.log(this.$route.query);
-                    //    var user = storage.getItem("user_item");
-                    //    //console.log(user);
-                    //    var juser = JSON.parse(user);
-                    //    console.log(juser);
-                    //    this.username = juser.username;
-                    //    this.phone = juser.phone;
-                    //    this.select_gender = juser.gender;
-                    //    this.select_role = '';
-                    //    storage.setItem("user_id",juser.user_id);
-                    //    //const routerParams = this.$route.query.mallCode
-                    //    //// 将数据放在当前组件的数据内
-                    //    //this.mallInfo.searchMap.mallCode = routerParams;
-                    //    //this.keyupMallName()
-                    //}
+                    console.log("接收参数");
+                    if (!window.localStorage) {
+                        alert("浏览器不支持localstorage");
+                    } else {
+                        var storage = window.localStorage;
+                        // console.log(this.$route.query);
+                        var store = storage.getItem("store_item");
+                        //console.log(user);
+                        var jstore= JSON.parse(store);
+                        console.log(jstore);
+                        this.store_phone_num = jstore.store_phone_num;
+                        this.store_telephone = jstore.store_telephone;
+                        this.store_name = jstore.store_name;
+                        this.store_position = jstore.store_position;
+                        storage.setItem("store_id", jstore.store_id);
+                        //const routerParams = this.$route.query.mallCode
+                        //// 将数据放在当前组件的数据内
+                        //this.mallInfo.searchMap.mallCode = routerParams;
+                        //this.keyupMallName()
+                        //}
+                    }
                 }
-            },
+                },
             watch: {
                 '$route': 'getParams'
             },
-            // mounted () {
-            //   axios
-            //     .post('http://119.3.179.137:8080/admin/getUserListWithLimit',
-            //           params,)
-            //     .then(
-            //           //response => (this.info = response)
-            //         function (res) {
-            //               console.log(res);
-            //               //if (res.data.code == 1) {
-            //               //    alert("登陆成功");
-            //               //    console.log("登陆成功");
-            //               //}else{
-            //               //    alert("登陆验证失败");
-            //               //    console.log("登陆验证失败");
-            //               //}
-            ////vm.answer = _.capitalize(response.data.answer)
-            //         }
-            //      )
-            //     .catch(function (error) { // 请求失败处理
-            //       console.log(error);
-            //     });
-            // },
-            //methods: {
-            //            edit(item){
-            //               this.$router.push({ path: '/编辑用户.html', params: { user: item } });
 
-            //            },
-            //           editUser: function () {
-            //                    //const params = new URLSearchParams();
-            //                    //params.append('user_id', this.user_id);
-            //                    //params.append('password', this.password);
-            //               var n = {
-            //                  // 'user_id': this.user_id,
-            //                   'username': this.username, 'gender': this.select_gender, 'phone': this.phone
-            //               };
-            //                    //var data = JSON.stringify(n);
-            //                    //var data =Qs.stringify(n);
-            //                    console.log(n);
-            //                    //console.log(params);
-            //                    axios.post('http://119.3.179.137:8080/admin/updateUserInfo',
-            //                        params,)
-            //                    .then(
-            //                        function (res) {
-            //                            console.log(res);
-            //                            if (res.data.code == 1) {
-            //                                //alert("编辑失败");
-            //                                console.log("编辑成功");
-            //                            }else{
-            //                                //alert("编辑失败");
-            //                                console.log("编辑失败");
-            //                            }
-            //	          //vm.answer = _.capitalize(response.data.answer)
-            //                        }
-            //                    )
-            //        .catch(function (error) {
-            //                        console.log(error);
-            //           alert("编辑用户失败！");
-            //          //vm.answer = 'Error! Could not reach the API. ' + error
-            //	           })
-            //    }
-            //}
         })
     </script>
 
