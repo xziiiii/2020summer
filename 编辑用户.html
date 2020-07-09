@@ -43,12 +43,15 @@
                           <span class="x-red">*</span>性别
                       </label>
                       <div class="layui-input-inline">
-                         <select v-model="select_gender" name="gender" lay-filter="required">
-                           <option value="1">男</option>
-                           <option value="0">女</option>
-                         </select>
-<!--                          <input type="text" id="gender" name="gender" required="" lay-verify="phone"-->
-<!--                          autocomplete="off" class="layui-input">-->
+                          <select v-model="select_gender" name="gender">
+                              <option v-for="item in gender" v-bind:value="item.gender_id" v-model="item.gender_id">{{item.name}}</option>
+                          </select>
+                          <!--<select v-model="select_gender" name="gender" lay-filter="required">
+                              <option value="1">男</option>
+                              <option value="0">女</option>
+                          </select>-->
+                          <!--                          <input type="text" id="gender" name="gender" required="" lay-verify="phone"-->
+                          <!--                          autocomplete="off" class="layui-input">-->
                       </div>
 <!--                      <div class="layui-form-mid layui-word-aux">-->
 <!--                          <span class="x-red">*</span>将会成为您唯一的登入名-->
@@ -105,7 +108,11 @@
                 $ = layui.jquery;
                 var form = layui.form,
                 layer = layui.layer;
+                //var laydate = layui.laydate;
 
+                //laydate.render({
+                //  elem: '#start' //指定元素
+                //});
                 //自定义验证规则
                 //form.verify({
                 //    nikename: function(value) {
@@ -128,47 +135,79 @@
                             alert("浏览器不支持localstorage");
                     } else {
                         var storage = window.localStorage;
-                        var user_id = storage.getItem("user_id");
-                        console.log(user_id);
+                        var user = storage.getItem("user_item");
+                        localStorage.removeItem("user_item");
+                        //var user_id = storage.getItem("user_id");
                     }
-                    console.log(data);
-                    console.log(data.field);
                     var info = data.field;
-                    info.user_id = user_id;
-                    delete info.role;
-                    var data = JSON.stringify(info);
-                    console.log(info);
+                    var juser = JSON.parse(user);
+                    juser.username = info.username;
+                    juser.gender = info.gender;
+                    juser.phone = info.phone;
+                    console.log(user);
                     console.log(data);
+                    console.log(info);
+                    //delete info.role;
+                    var userdata = JSON.stringify(juser);
+                    console.log(userdata);
                     $.ajax({
                         type: "post",
                         url: "http://119.3.179.137:8080/admin/updateUserInfo",
                         dataType: "json",
                         contentType:'application/json;charset=UTF-8',
-                        data: data,
+                        data: userdata,
                         success: function (responseTxt) {
                              console.log(responseTxt);
                             if (responseTxt.code == 1) {
-                                layer.msg("提交成功");
+                                console.log("编辑用户信息成功");
+                                //layer.msg("提交成功");
                                 //关闭当前frame
-                                xadmin.close();
+                                //xadmin.close();
 
                                 // 可以对父窗口进行刷新
-                                xadmin.father_reload();
+                                //xadmin.father_reload();
                             } else {
-                                layer.msg("提交出错");
+                                console.log("编辑用户信息失败");
+                                //layer.msg("提交出错");
                             }
                         }
                     });
+                    const params = new URLSearchParams();
+                    params.append('user_id', juser.user_id);
+                    params.append('role_id', info.role);
+                    console.log(params);
+                    axios
+                      .post('http://119.3.179.137:8080/admin/setUserRole',
+                            params,)
+                      .then(
+                          function (res) {
+                              console.log(res);
+                              if (res.data.code == 1) {
+                                  console.log("编辑用户角色成功");
+                                //layer.msg("编辑成功", { icon: 1 });
+                                //关闭当前frame
+                                //xadmin.close();
+
+                                // 可以对父窗口进行刷新   
+                                //xadmin.father_reload();
+                              } else {
+                                  console.log("编辑用户角色失败");
+                              }
+                          }
+                       )
+                      .catch(function (error) { // 请求失败处理
+                        console.log(error);
+                      });
                     //发异步，把数据提交给php
                     layer.alert("编辑成功", {
                         icon: 6
                     },
                     function() {
                         //关闭当前frame
-                        xadmin.close();
+                        //xadmin.close();
 
                         // 可以对父窗口进行刷新
-                        xadmin.father_reload();
+                        //xadmin.father_reload();
                     });
                     return false;
                 });
@@ -192,11 +231,12 @@
                       phone: "",
                       roles: [{ "role_id": "1","name": 'role1' }, { "role_id": "2","name": 'role2' }],
                       select_gender: "",
-                      select_role: ""
+                      select_role: "",
+                      gender: [{ "gender_id": "1","name": '男' }, { "gender_id": "0","name": '女' }],
                   },
                 created() {
                     this.getParams();
-                  },
+                },
                   mounted: function () {
                     this.getMakerList();
                   },
@@ -251,31 +291,123 @@
 				              //vm.answer = 'Error! Could not reach the API. ' + error
 				    	           })
                     },
-                    getParams() {
-                        // 取到路由带过来的参数
-                        console.log("接收参数");
-                        if (!window.localStorage) {
-                            alert("浏览器不支持localstorage");
-                        } else {
-                            var storage = window.localStorage;
-                            // console.log(this.$route.query);
-                            var user = storage.getItem("user_item");
-                            //console.log(user);
-                            var juser = JSON.parse(user);
-                            console.log(juser);
-                            this.username = juser.username;
-                            this.phone = juser.phone;
-                            this.select_gender = juser.gender;
-                            this.select_role = '';
-                            storage.setItem("user_id",juser.user_id);
-                            //const routerParams = this.$route.query.mallCode
-                            //// 将数据放在当前组件的数据内
-                            //this.mallInfo.searchMap.mallCode = routerParams;
-                            //this.keyupMallName()
-                        }
+                      async getParams() {
+                          // 取到路由带过来的参数
+                          console.log("接收参数");
+                          if (!window.localStorage) {
+                              alert("浏览器不支持localstorage");
+                          } else {
+                              var storage = window.localStorage;
+                              var user = storage.getItem("user_item");
+                              var roles = storage.getItem("roles");
+                              //localStorage.removeItem("user_item");
+                              var juser = JSON.parse(user);
+                              var role_list = JSON.parse(roles);
+                              console.log(juser);
+                              console.log(role_list);
+                              this.username = juser.username;
+                              this.phone = juser.phone;
+                              this.select_gender = juser.gender;
+                              this.roles = role_list;
+                              const param = new URLSearchParams();
+                              param.append('user_id', juser.user_id);
+                              console.log(param);
+                              try {
+                                  let ress = await axios
+                                      .post('http://119.3.179.137:8080/admin/getUserRole',
+                                      param)
+                                  console.log(ress);
+                                  if (ress.data.data.role == null) { this.select_role = ''; }
+                                  else { this.select_role = ress.data.data.role.role_id; }
+                                  this.select_gender = juser.gender;
+                                  console.log(this.select_role);
+                                  console.log(this.select_gender);
+                                  setTimeout(function () {
+                                      layui.form.render();//延迟重新渲染
+                                   }, 10);
+                                } catch (err) {
+                                    console.log(err)
+                                    alert('请求出错！')
+                                }
+                              //axios
+                              //    .post('http://119.3.179.137:8080/admin/getUserRole',
+                              //        param)
+                              //    .then(
+                              //        function (res) {
+                              //            console.log('获取role');
+                              //            console.log(res);
+                              //            console.log(res.data.data.role);
+                              //            if (res.data.code == 1) {
+                              //                select_role_id = res.data.data.role.role_id;
+                              //                //layui.use(['form'], function () {
+                              //                //    layui.form.render();
+                              //                //});
+                              //                //setTimeout(function () {
+                              //                //    layui.form.render();//延迟重新渲染
+                              //                //}, 10);
+                              //            } else {
+                              //                console.log('获取role失败');
+                              //            }
+                              //        }
+                              //    )
+                              //    .catch(function (error) { // 请求失败处理
+                              //        console.log(error);
+                              //    });
+                              
+                              //const routerParams = this.$route.query.mallCode
+                              //// 将数据放在当前组件的数据内
+                              //this.mallInfo.searchMap.mallCode = routerParams;
+                              //this.keyupMallName()
+
+                              //axios
+                              //    .post('http://119.3.179.137:8080/admin/getRoleList')
+                              //    .then(
+                              //        function (res) {
+                              //            console.log(res);
+                              //            console.log(res.data.data.role_list);
+                              //            this.roles = res.data.data.role_list;
+                              //            console.log(this.roles);
+                              //            layui.use(['form'], function () {
+                              //                    layui.form.render();
+                              //                });
+                              //            //setTimeout(function () {  
+                              //            //  layui.use(['form', 'layer'],
+                              //            //  function () {
+                              //            //      $ = layui.jquery;
+                              //            //      var form = layui.form,
+                              //            //      layer = layui.layer;
+                              //            //      form.render('select');
+                              //            //  });
+                              //            //  //layui.form.render('select');//延迟重新渲染
+                              //            //},10);
+                              //            //layui.use(['form'], function () {
+                              //            //    form.render();
+                              //            //});
+                              //            //setTimeout(function () {  
+                              //            //  layui.form.render('select');//延迟重新渲染
+                              //            //},10);
+                              //        }
+                              //    )
+                              //    .catch(function (error) { // 请求失败处理
+                              //        console.log(error);
+                              //    });
+
+                          }
+                      }
+                },
+                updated: function () {
+                    var _this = this;
+                    if(_this.form){
+                    _this.form.render();
                     }
-                  },
-                  watch: {
+                    //this.$nextTick(function () {
+                    //    layui.use(['form'], function () {
+                    //        form.render();
+                    //    });
+                    //});
+                   
+                },
+                  watch:{
                    '$route': 'getParams'
                   },
                  // mounted () {

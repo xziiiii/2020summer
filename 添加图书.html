@@ -3,7 +3,7 @@
     
 <head>
     <meta charset="UTF-8">
-    <title>添加用户</title>
+    <title>添加图书</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
@@ -29,95 +29,93 @@
         <div class="layui-fluid" id="app">
             <div class="layui-row">
                 <form class="layui-form">
-                  <div class="layui-form-item">
-                      <label for="username" class="layui-form-label">
-                          <span class="x-red">*</span>用户名
-                      </label>
-                      <div class="layui-input-inline">
-                          <input v-model="username" type="text" id="username" name="username" required="" lay-verify="required"
-                          autocomplete="off" class="layui-input">
-                      </div>
-                  </div>
-                  <div class="layui-form-item">
-                      <label for="phone" class="layui-form-label">
-                          <span class="x-red">*</span>性别
-                      </label>
-                      <div class="layui-input-inline">
-                          <select v-model="select_gender" name="gender">
-                              <option v-for="item in gender" v-bind:value="item.gender_id" v-model="item.gender_id">{{item.name}}</option>
-                          </select>
-<!--                          <input type="text" id="gender" name="gender" required="" lay-verify="phone"-->
-<!--                          autocomplete="off" class="layui-input">-->
-                      </div>
-<!--                      <div class="layui-form-mid layui-word-aux">-->
-<!--                          <span class="x-red">*</span>将会成为您唯一的登入名-->
-<!--                      </div>-->
-                  </div>
-                  <div class="layui-form-item">
-                      <label for="L_email" class="layui-form-label">
-                          <span class="x-red"></span>电话
-                      </label>
-                      <div class="layui-input-inline">
-                          <input v-model="phone" type="text" id="phone" name="phone" required=""
-                          autocomplete="off" class="layui-input">
-                      </div>
-                      <div class="layui-form-mid layui-word-aux">
-                          <span class="x-red"></span>
-                      </div>
-                  </div>
-                  <div class="layui-form-item">
-                      <label for="username" class="layui-form-label">
-                          <span class="x-red"></span>邮箱
-                      </label>
-                      <div class="layui-input-inline">
-                          <input v-model="email" type="text" id="email" name="email" required=""
-                          autocomplete="off" class="layui-input">
-                      </div>
-                  </div>
-                  <div class="layui-form-item">
-                      <label class="layui-form-label"><span class="x-red"></span>角色</label>
-                      <div class="layui-input-inline">
-                          <select v-model="select_role" name="role">
-                              <option v-for="item in roles" v-bind:value="item.role_id" v-model="item.role_id">{{item.name}}</option>
-                          </select>
-                          <!--                          <input type="text" id="gender" name="gender" required="" lay-verify="phone"-->
-                          <!--                          autocomplete="off" class="layui-input">-->
-                      </div>
-                      <!--                      <div class="layui-input-block">-->
-                      <!--                        <input type="checkbox" name="like1[write]" lay-skin="primary" title="超级管理员" checked="">-->
-                      <!--                        <input type="checkbox" name="like1[read]" lay-skin="primary" title="编辑人员">-->
-                      <!--                        <input type="checkbox" name="like1[write]" lay-skin="primary" title="宣传人员" checked="">-->
-                      <!--                      </div>-->
-                  </div>
-                  <div class="layui-form-item">
-                      <label for="L_pass" class="layui-form-label">
-                          <span class="x-red">*</span>密码
-                      </label>
-                      <div class="layui-input-inline">
-                          <input type="password" id="L_pass" name="password" required="" lay-verify="pass"
-                          autocomplete="off" class="layui-input">
-                      </div>
-                      <div class="layui-form-mid layui-word-aux">
-                      </div>
-                  </div>
-                  <div class="layui-form-item">
-                      <label for="L_repass" class="layui-form-label">
-                          <span class="x-red">*</span>确认密码
-                      </label>
-                      <div class="layui-input-inline">
-                          <input type="password" id="L_repass" name="repass" required="" lay-verify="repass"
-                          autocomplete="off" class="layui-input">
-                      </div>
-                  </div>
-                  <div class="layui-form-item">
-                      <label class="layui-form-label">
-                      </label>
-                      <button v-on:click="editUser" class="layui-btn" lay-filter="add" lay-submit="">
-                          确&nbsp;&nbsp;&nbsp;&nbsp;认
-                      </button>
-                      <!-- lay-filter="add" lay-submit="" -->
-                  </div>
-              </form>
+                    <div class="layui-form-item">
+                        <label for="name" class="layui-form-label">
+                            <span class="x-red">*</span>图书名称
+                        </label>
+                        <div class="layui-input-inline">
+                            <input v-model="name" type="text" id="name" name="name" required="" lay-verify="required"
+                                   autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="store_id" class="layui-form-label">
+                            <span class="x-red">*</span>店铺
+                        </label>
+                        <div class="layui-input-inline">
+                            <input v-model="store_id" type="text" id="store_id" name="store_id" required="" lay-verify="required"
+                                   autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="author" class="layui-form-label">
+                            <span class="x-red">*</span>作者
+                        </label>
+                        <div class="layui-input-inline">
+                            <input v-model="author" type="text" id="author" name="author" required="" lay-verify="required"
+                                   autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="press" class="layui-form-label">
+                            <span class="x-red">*</span>出版社
+                        </label>
+                        <div class="layui-input-inline">
+                            <input v-model="press" type="text" id="press" name="press" required="" lay-verify="required"
+                                   autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="price" class="layui-form-label">
+                            <span class="x-red">*</span>价格
+                        </label>
+                        <div class="layui-input-inline">
+                            <input v-model="price" type="text" id="price" name="price" required="" lay-verify="required"
+                                   autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="market_price" class="layui-form-label">
+                            <span class="x-red"></span>市场价
+                        </label>
+                        <div class="layui-input-inline">
+                            <input v-model="market_price" type="text" id="market_price" name="market_price" required=""
+                                   autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="store_mount" class="layui-form-label">
+                            <span class="x-red">*</span>库存数量
+                        </label>
+                        <div class="layui-input-inline">
+                            <input v-model="store_mount" type="text" id="store_mount" name="store_mount" required="" lay-verify="required"
+                                   autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><span class="x-red"></span>是否上架</label>
+                        <div class="layui-input-inline">
+                            <select v-model="is_shelf" name="is_shelf">
+                                <option v-for="item in roles" v-bind:value="item.role_id" v-model="item.role_id">{{item.name}}</option>
+                            </select>
+                            <!--                          <input type="text" id="gender" name="gender" required="" lay-verify="phone"-->
+                            <!--                          autocomplete="off" class="layui-input">-->
+                        </div>
+                        <!--                      <div class="layui-input-block">-->
+                        <!--                        <input type="checkbox" name="like1[write]" lay-skin="primary" title="超级管理员" checked="">-->
+                        <!--                        <input type="checkbox" name="like1[read]" lay-skin="primary" title="编辑人员">-->
+                        <!--                        <input type="checkbox" name="like1[write]" lay-skin="primary" title="宣传人员" checked="">-->
+                        <!--                      </div>-->
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">
+                        </label>
+                        <button class="layui-btn" lay-filter="add" lay-submit="">
+                            确&nbsp;&nbsp;&nbsp;&nbsp;认
+                        </button>
+                        <!-- lay-filter="add" lay-submit="" -->
+                    </div>
+                </form>
             </div>
         </div>
         <script>
@@ -163,69 +161,44 @@
                     console.log(data);
                     console.log(data.field);
                     var info = data.field;
-                    var getinfo = data.field;
                     //info.user_id = user_id;
                     //delete info.role;
-                    delete info.repass;
-                    var data = JSON.stringify(info);
-                    console.log(info);
-                    console.log(data);
-                    var id = '';
-                    //$.ajax({
-                    //    type: "post",
-                    //    url: "http://119.3.179.137:8080/admin/addUser",
-                    //    dataType: "json",
-                    //    contentType:'application/json;charset=UTF-8',
-                    //    data: data,
-                    //    success: function (responseTxt) {
-                    //         console.log(responseTxt);
-                    //        if (responseTxt.code == 1) {
-                    //            id = responseTxt.data.user_id;
-                    //            console.log(id);
-                    //            layer.msg("提交成功", { icon: 6 },
-                    //                function () {
-                    //                //关闭当前frame
-                    //                //xadmin.close();
+                    //delete info.repass;
+                    var param = JSON.stringify(info);
+                    console.log(param);
+                    $.ajax({
+                        type: "post",
+                        url: "http://119.3.179.137:8080/book/addBook",
+                        dataType: "json",
+                        contentType:'application/json;charset=UTF-8',
+                        data: param,
+                        success: function (responseTxt) {
+                             console.log(responseTxt);
+                            if (responseTxt.code == 1) {
+                                //id = responseTxt.data.user_id;
+                                //console.log(id);
+                                layer.msg("提交成功", { icon: 6 },
+                                    function () {
+                                    //关闭当前frame
+                                    xadmin.close();
 
-                    //                // 可以对父窗口进行刷新
-                    //                //xadmin.father_reload();
-                    //            });
-                    //            //setTimeout("",1000);
-                    //            //关闭当前frame
-                    //            //xadmin.close();
-                    //            // 可以对父窗口进行刷新
-                    //            //xadmin.father_reload();
-                    //        } else {
-                    //            layer.msg("提交出错");
-                    //        }
-                    //    }
-                    //});
-                    const params = new URLSearchParams();
-                    params.append('user_id', id);
-                    params.append('role_id', getinfo.role);
-                    console.log(params);
-                    //axios
-                    //  .post('http://119.3.179.137:8080/admin/setUserRole',
-                    //        params,)
-                    //  .then(
-                    //      function (res) {
-                    //          console.log(res);
-                    //          if (res.data.code == 1) {
-                    //              console.log("编辑用户角色成功");
-                    //            //layer.msg("编辑成功", { icon: 1 });
-                    //            //关闭当前frame
-                    //            //xadmin.close();
-
-                    //            // 可以对父窗口进行刷新   
-                    //            //xadmin.father_reload();
-                    //          } else {
-                    //              console.log("编辑用户角色失败");
-                    //          }
-                    //      }
-                    //   )
-                    //  .catch(function (error) { // 请求失败处理
-                    //    console.log(error);
-                    //  });
+                                    // 可以对父窗口进行刷新
+                                    xadmin.father_reload();
+                                });
+                                //setTimeout("",1000);
+                                //关闭当前frame
+                                //xadmin.close();
+                                // 可以对父窗口进行刷新
+                                //xadmin.father_reload();
+                            } else {
+                                layer.msg("提交出错");
+                            }
+                        }
+                    });
+                    //const params = new URLSearchParams();
+                    //params.append('user_id', id);
+                    //params.append('role_id', getinfo.role);
+                    //console.log(params);
                     //发异步，把数据提交给php
                     //layer.alert("添加成功", {
                     //    icon: 6
@@ -256,7 +229,7 @@
 			      data: {
 			          username: "",
                       phone: "",
-                      roles: [{ "role_id": "1", "name": 'role1' }, { "role_id": "2", "name": 'role2' }],
+                      roles: [{ "role_id": "1", "name": '是' }, { "role_id": "0", "name": '否' }],
                       gender: [{ "gender_id": "1","name": '男' }, { "gender_id": "0","name": '女' }],
                       select_gender: "",
                       select_role: ""
@@ -332,21 +305,21 @@
 				    	           })
                     },
                       async getParams() {
-                          var storage = window.localStorage;
-                          var roles = storage.getItem("roles");
-                              //localStorage.removeItem("user_item");
-                              var role_list = JSON.parse(roles);
-                          console.log(role_list);
-                          try {
+                          //var storage = window.localStorage;
+                          //var roles = storage.getItem("roles");
+                          //    //localStorage.removeItem("user_item");
+                          //    var role_list = JSON.parse(roles);
+                          //console.log(role_list);
+                          //try {
                                   
-                                  this.roles = role_list;
-                                  setTimeout(function () {
-                                      layui.form.render();//延迟重新渲染
-                                   }, 10);
-                                } catch (err) {
-                                    console.log(err)
-                                    alert('请求出错！')
-                                }
+                          //        this.roles = role_list;
+                          //        setTimeout(function () {
+                          //            layui.form.render();//延迟重新渲染
+                          //         }, 10);
+                          //      } catch (err) {
+                          //          console.log(err)
+                          //          alert('请求出错！')
+                          //      }
                           // 取到路由带过来的参数
                         //console.log("接收参数");
                         //if (!window.localStorage) {
