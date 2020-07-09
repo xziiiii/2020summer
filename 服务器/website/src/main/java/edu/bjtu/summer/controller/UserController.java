@@ -14,6 +14,7 @@ import java.util.List;
 public class UserController {
 
     private UserService userService = new UserService();
+    private RoleService roleService = new RoleService();
 
     @RequestMapping(value = "/admin/login", method = RequestMethod.POST)
     public JsonTemplate login(@RequestParam(value = "user_id", required = false) String userId,
@@ -128,6 +129,33 @@ public class UserController {
         if (userService.deleteUser(Integer.parseInt(user_id))) {
             return new JsonTemplate(1);
         } else {
+            return new JsonTemplate(0);
+        }
+    }
+
+    @RequestMapping(value = "/admin/getUserRole", method = RequestMethod.POST)
+    public JsonTemplate getUserRole(@RequestParam(required = false) String user_id){
+        if (user_id == null || user_id.equals("")){
+            return new JsonTemplate(0);
+        }
+
+        JsonTemplate jsonTemplate = new JsonTemplate(1);
+        Role role = roleService.getRoleByUserId(Integer.parseInt(user_id));
+        jsonTemplate.addData("role", role);
+
+        return jsonTemplate;
+    }
+
+    @RequestMapping(value = "/admin/setUserRole", method = RequestMethod.POST)
+    public JsonTemplate setUserRole(@RequestParam(required = false) String user_id,
+                                    @RequestParam(required = false) String role_id){
+        if (user_id == null || user_id.equals("") || role_id == null || role_id.equals("")){
+            return new JsonTemplate(0);
+        }
+
+        if (userService.setUserRole(Integer.parseInt(user_id), Integer.parseInt(role_id))){
+            return new JsonTemplate(1);
+        }else{
             return new JsonTemplate(0);
         }
     }

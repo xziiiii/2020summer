@@ -1,6 +1,8 @@
 package edu.bjtu.summer.service;
 
+import edu.bjtu.summer.mapper.RoleMapper;
 import edu.bjtu.summer.mapper.UserMapper;
+import edu.bjtu.summer.model.Role;
 import edu.bjtu.summer.model.User;
 import edu.bjtu.summer.util.JsonTemplate;
 import edu.bjtu.summer.util.MybatisUtil;
@@ -49,6 +51,24 @@ public class UserService {
         UserMapper  userMapper = sqlSession.getMapper(UserMapper.class);
 
         boolean result = userMapper.updateUser(user);
+        sqlSession.commit();
+        sqlSession.close();
+
+        return result;
+    }
+
+    public boolean setUserRole(int user_id, int role_id){
+        SqlSession sqlSession = MybatisUtil.getSession();
+        RoleMapper roleMapper = sqlSession.getMapper(RoleMapper.class);
+
+        boolean result;
+        Role role = roleMapper.getRoleByUserId(user_id);
+        if (role == null){
+            result = roleMapper.setUserRole(user_id, role_id);
+        }else{
+            result = roleMapper.updateUserRole(user_id, role_id);
+        }
+
         sqlSession.commit();
         sqlSession.close();
 
