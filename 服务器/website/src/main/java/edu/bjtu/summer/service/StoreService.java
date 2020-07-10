@@ -56,6 +56,10 @@ public class StoreService {
         SqlSession sqlSession = MybatisUtil.getSession();
         StoreMapper storeMapper = sqlSession.getMapper(StoreMapper.class);
 
-        return storeMapper.deleteStore(store_id);
+        boolean result = storeMapper.deleteStore(store_id);
+        sqlSession.commit();
+        sqlSession.close();
+
+        return result;
     }
 }

@@ -1,15 +1,14 @@
 package edu.bjtu.summer.controller;
 
+import edu.bjtu.summer.model.OrderShipping;
 import edu.bjtu.summer.model.ShoppingCarDetail;
 import edu.bjtu.summer.service.ShoppingCarService;
 import edu.bjtu.summer.util.JsonTemplate;
 import org.apache.ibatis.annotations.Insert;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/shopping_car/", method = RequestMethod.POST)
@@ -71,6 +70,29 @@ public class ShoppingCarController {
         }
 
         if (carService.clearCar(Integer.parseInt(user_id))){
+            return new JsonTemplate(1);
+        }else{
+            return new JsonTemplate(0);
+        }
+    }
+
+    @RequestMapping("/toOrder")
+    public JsonTemplate toOrder(@RequestParam(required = false) String user_id){
+        if (user_id == null || user_id.equals("")){
+            return new JsonTemplate(0);
+        }
+
+        JsonTemplate jsonTemplate = new JsonTemplate(1);
+        Map<String, Object> map = carService.toOrder(Integer.parseInt(user_id));
+        jsonTemplate.addData("total_price", map.get("total_price"));
+        jsonTemplate.addData("order_id", map.get("order_id"));
+
+        return jsonTemplate;
+    }
+
+    @RequestMapping("/setOrderShipping")
+    public JsonTemplate setOrderShipping(@RequestBody OrderShipping orderShipping){
+        if (carService.setOrderShipping(orderShipping)){
             return new JsonTemplate(1);
         }else{
             return new JsonTemplate(0);

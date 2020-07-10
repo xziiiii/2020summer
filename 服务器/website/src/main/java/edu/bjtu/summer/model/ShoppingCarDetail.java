@@ -3,13 +3,13 @@ package edu.bjtu.summer.model;
 public class ShoppingCarDetail {
 
     private int user_id;
-    private int book_id;
+    private long book_id;
     private int amount;
     private double unit_price;
 
     public ShoppingCarDetail(){}
 
-    public ShoppingCarDetail(int user_id, int book_id, int amount, double unit_price) {
+    public ShoppingCarDetail(int user_id, long book_id, int amount, double unit_price) {
         this.user_id = user_id;
         this.book_id = book_id;
         this.amount = amount;
@@ -24,11 +24,11 @@ public class ShoppingCarDetail {
         this.user_id = user_id;
     }
 
-    public int getBook_id() {
+    public long getBook_id() {
         return book_id;
     }
 
-    public void setBook_id(int book_id) {
+    public void setBook_id(long book_id) {
         this.book_id = book_id;
     }
 
