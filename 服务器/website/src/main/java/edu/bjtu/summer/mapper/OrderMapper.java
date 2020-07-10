@@ -1,5 +1,6 @@
 package edu.bjtu.summer.mapper;
 
+import edu.bjtu.summer.model.Order;
 import edu.bjtu.summer.model.OrderDetail;
 import edu.bjtu.summer.model.OrderShipping;
 import edu.bjtu.summer.model.User;
@@ -21,4 +22,11 @@ public interface OrderMapper {
 
     @Select("SELECT * FROM order_shipping WHERE order_id = #{order_id}")
     OrderShipping getShippingByOrderId(String order_id);
+
+    @Select("SELECT * FROM orders WHERE user_id = #{user_id} LIMIT #{left}, #{right}")
+    List<Order> getOrderListByUserIdWithLimit(@Param("user_id") int user_id,
+                                              @Param("left") int left, @Param("right") int right);
+
+    @Select("SELECT * FROM order_detail WHERE order_id = #{order_id}")
+    List<OrderDetail> getOrderDetailListByOrderId(String order_id);
 }

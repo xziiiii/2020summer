@@ -57,4 +57,7 @@ public interface BookMapper {
             " GROUP BY bookid HAVING number >= 10 ORDER BY rating DESC LIMIT #{left}, #{right}) as r " +
             "WHERE b.book_id = r.bookid")
     List<Map<String, String>> getBookRankListByRatingWithLimit(@Param("left") int left, @Param("right") int right);
+
+    @Select("SELECT * FROM book_info WHERE book_id = #{book_id}")
+    Book getBookByBookId(long book_id);
 }

@@ -1,5 +1,6 @@
 package edu.bjtu.summer.controller;
 
+import edu.bjtu.summer.model.Order;
 import edu.bjtu.summer.model.OrderDetail;
 import edu.bjtu.summer.model.OrderShipping;
 import edu.bjtu.summer.model.User;
@@ -58,6 +59,38 @@ public class OrderController {
         JsonTemplate jsonTemplate = new JsonTemplate(1);
         OrderShipping shipping = orderService.getOrderShipping(order_id);
         jsonTemplate.addData("order_shipping", shipping);
+
+        return jsonTemplate;
+    }
+
+    @RequestMapping("/order/getUserOrderListWithLimit")
+    public JsonTemplate getUserOrderListWithLimit(@RequestParam(required = false) String user_id,
+                                                  @RequestParam(required = false) String left,
+                                                  @RequestParam(required = false) String right){
+        if (user_id == null || user_id.equals("")
+                || left == null || left.equals("") || right == null || right.equals("")){
+            return new JsonTemplate(0);
+        }
+
+        JsonTemplate jsonTemplate = new JsonTemplate(1);
+        List<Order> orderList = orderService.getUserOrderListWithLimit(Integer.parseInt(user_id),
+                Integer.parseInt(left), Integer.parseInt(right));
+        jsonTemplate.addData("list_size", orderList.size());
+        jsonTemplate.addData("order_list", orderList);
+
+        return jsonTemplate;
+    }
+
+    @RequestMapping("/order/getOrderDetailListByOrderId")
+    public JsonTemplate getOrderDetailList(@RequestParam(required = false) String order_id){
+        if (order_id == null || order_id.equals("")){
+            return new JsonTemplate(0);
+        }
+
+        JsonTemplate jsonTemplate = new JsonTemplate(1);
+        List<OrderDetail> detailList = orderService.getOrderDetailListByOrderId(order_id);
+        jsonTemplate.addData("list_size", detailList.size());
+        jsonTemplate.addData("detail_list", detailList);
 
         return jsonTemplate;
     }

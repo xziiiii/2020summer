@@ -137,4 +137,16 @@ public class BookController {
 
         return jsonTemplate;
     }
+
+    @RequestMapping("/getBookInfoByBookId")
+    public JsonTemplate getBookInfoByBookId(@RequestParam(required = false) String book_id){
+        if (book_id == null || book_id.equals("")){
+            return new JsonTemplate(0);
+        }
+
+        JsonTemplate jsonTemplate = new JsonTemplate(1);
+        jsonTemplate.addData("book_info", bookService.getBookByBookId(Long.parseLong(book_id)));
+
+        return jsonTemplate;
+    }
 }

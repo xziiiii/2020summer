@@ -1,6 +1,7 @@
 package edu.bjtu.summer.service;
 
 import edu.bjtu.summer.mapper.OrderMapper;
+import edu.bjtu.summer.model.Order;
 import edu.bjtu.summer.model.OrderDetail;
 import edu.bjtu.summer.model.OrderShipping;
 import edu.bjtu.summer.model.User;
@@ -30,5 +31,19 @@ public class OrderService {
         OrderMapper orderMapper = sqlSession.getMapper(OrderMapper.class);
 
         return orderMapper.getShippingByOrderId(order_id);
+    }
+
+    public List<Order> getUserOrderListWithLimit(int user_id, int left, int right){
+        SqlSession sqlSession = MybatisUtil.getSession();
+        OrderMapper orderMapper = sqlSession.getMapper(OrderMapper.class);
+
+        return orderMapper.getOrderListByUserIdWithLimit(user_id, left, right);
+    }
+
+    public List<OrderDetail> getOrderDetailListByOrderId(String order_id){
+        SqlSession sqlSession = MybatisUtil.getSession();
+        OrderMapper orderMapper = sqlSession.getMapper(OrderMapper.class);
+
+        return orderMapper.getOrderDetailListByOrderId(order_id);
     }
 }

@@ -82,4 +82,11 @@ public class BookService {
 
         return bookMapper.getBookRankListByRatingWithLimit(left, right);
     }
+
+    public Book getBookByBookId(long book_id){
+        SqlSession sqlSession = MybatisUtil.getSession();
+        BookMapper bookMapper = sqlSession.getMapper(BookMapper.class);
+
+        return bookMapper.getBookByBookId(book_id);
+    }
 }
