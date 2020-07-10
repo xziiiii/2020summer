@@ -23,5 +23,6 @@
         <mapper class="edu.bjtu.summer.mapper.StoreMapper"/>
         <mapper class="edu.bjtu.summer.mapper.BookMapper"/>
         <mapper class="edu.bjtu.summer.mapper.OrderMapper"/>
+        <mapper class="edu.bjtu.summer.mapper.ShoppingCarMapper"/>
     </mappers>
 </configuration>
