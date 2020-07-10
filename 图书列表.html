@@ -38,22 +38,23 @@
             <div class="layui-row layui-col-space15">
                 <div class="layui-col-md12">
                     <div class="layui-card">
-                        <!--<div class="layui-card-body ">
+                        <div class="layui-card-body ">
                             <form class="layui-form layui-col-space5">
-                                <div class="layui-inline layui-show-xs-block">
+                                <!--<div class="layui-inline layui-show-xs-block">
                                     <input class="layui-input"  autocomplete="off" placeholder="开始日" name="start" id="start">
                                 </div>
                                 <div class="layui-inline layui-show-xs-block">
                                     <input class="layui-input"  autocomplete="off" placeholder="截止日" name="end" id="end">
+                                </div>-->
+                                <div class="layui-inline layui-show-xs-block">
+                                    <input type="text" name="store_id"  placeholder="请输入店铺ID" autocomplete="off" class="layui-input">
                                 </div>
                                 <div class="layui-inline layui-show-xs-block">
-                                    <input type="text" name="username"  placeholder="请输入用户ID" autocomplete="off" class="layui-input">
-                                </div>
-                                <div class="layui-inline layui-show-xs-block">
-                                    <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+                                    <button class="layui-btn" lay-submit="" lay-filter="selectshop"><i class="layui-icon">查找</i></button>
+                                    <!-- &#xe615;  lay-filter="sreach" onclick="SelectShop()"-->
                                 </div>
                             </form>
-                        </div>-->
+                        </div>
                         <div class="layui-card-header">
                             <p></p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -211,6 +212,112 @@
           elem: '#end' //指定元素
         });
 
+          form.on('submit(selectshop)',
+              function (data) {
+                  var info = data.field;
+                  console.log(data);
+                  console.log(info);
+                  //delete info.role;
+
+                  const params = new URLSearchParams();
+                  //var storage = window.localStorage;
+                  //var store_id = storage.getItem("store_id");
+                  params.append('store_id', info.store_id);
+                  params.append('left', 1);
+                  params.append('right', 4);
+                  console.log(params);
+                  axios
+                      .post('http://119.3.179.137:8080/book/getStoreBookListWithLimit',
+                          params,)
+                      .then(
+                          function (res) {
+                              console.log(res);
+                              console.log(res.data.data.book_list);
+                              var storage=window.localStorage;
+                              storage.setItem("book_list",JSON.stringify(res.data.data.book_list));
+                              var result=storage.getItem("book_list");
+                              console.log(result);
+                              xadmin.father_reload();
+                              setTimeout(function () {  
+                              layui.form.render();//延迟重新渲染
+                              },10);
+                          }
+                      )
+                      .catch(function (error) { // 请求失败处理
+                      console.log(error);
+                      });
+
+                  //if (!window.localStorage) {
+                  //        alert("浏览器不支持localstorage");
+                  //} else {
+                  //    var storage = window.localStorage;
+                  //    var user = storage.getItem("user_item");
+                  //    localStorage.removeItem("user_item");
+                  //    //var user_id = storage.getItem("user_id");
+                  //}
+
+                  //$.ajax({
+                  //    type: "post",
+                  //    url: "http://119.3.179.137:8080/admin/updateUserInfo",
+                  //    dataType: "json",
+                  //    contentType:'application/json;charset=UTF-8',
+                  //    data: userdata,
+                  //    success: function (responseTxt) {
+                  //         console.log(responseTxt);
+                  //        if (responseTxt.code == 1) {
+                  //            console.log("编辑用户信息成功");
+                  //            //layer.msg("提交成功");
+                  //            //关闭当前frame
+                  //            //xadmin.close();
+
+                  //            // 可以对父窗口进行刷新
+                  //            //xadmin.father_reload();
+                  //        } else {
+                  //            console.log("编辑用户信息失败");
+                  //            //layer.msg("提交出错");
+                  //        }
+                  //    }
+                  //});
+                  //const params = new URLSearchParams();
+                  //params.append('user_id', juser.user_id);
+                  //params.append('role_id', info.role);
+                  //console.log(params);
+                  //axios
+                  //  .post('http://119.3.179.137:8080/admin/setUserRole',
+                  //        params,)
+                  //  .then(
+                  //      function (res) {
+                  //          console.log(res);
+                  //          if (res.data.code == 1) {
+                  //              console.log("编辑用户角色成功");
+                  //            //layer.msg("编辑成功", { icon: 1 });
+                  //            //关闭当前frame
+                  //            //xadmin.close();
+
+                  //            // 可以对父窗口进行刷新   
+                  //            //xadmin.father_reload();
+                  //          } else {
+                  //              console.log("编辑用户角色失败");
+                  //          }
+                  //      }
+                  //   )
+                  //  .catch(function (error) { // 请求失败处理
+                  //    console.log(error);
+                  //  });
+                  ////发异步，把数据提交给php
+                  //layer.alert("编辑成功", {
+                  //    icon: 6
+                  //},
+                  //function() {
+                      //关闭当前frame
+                      //xadmin.close();
+
+                      // 可以对父窗口进行刷新
+                      //xadmin.father_reload();
+                  //});
+                    return false;
+                });
+
 
       });
 
@@ -273,8 +380,7 @@
               layer.msg('已删除!',{icon:1,time:1000});
           });
       }
-
-
+      
 
       function delAll (argument) {
         var ids = [];
@@ -287,11 +393,15 @@
         console.log(ids);
           layer.confirm('确认要删除吗？' + ids.toString(), function (index) {
               console.log(ids);
-              for (var i = 0; i < ids.length; i++) {
+              var idss = [];
+              idss.push('10000000002');
+              idss.push('10000000003');
+              for (var i = 0; i < idss.length; i++) {
+                      console.log(idss[i]);
                       const params = new URLSearchParams();
-                      params.append('book_id', ids[i]);
-                      var data = JSON.stringify(params);
-                      console.log(data);
+                      params.append('book_id', idss[i]);
+                      var del_id = JSON.stringify(params);
+                      console.log(del_id);
                       axios
                           .post('http://119.3.179.137:8080/book/deleteBook',
                                 params,)
@@ -400,24 +510,34 @@
                params.append('left', 2);
                params.append('right', 4);
                console.log(params);
-                axios
-                  .post('http://119.3.179.137:8080/book/getStoreBookListWithLimit',
-                        params,)
-                  .then(
-                        //response => (this.info = response)
-                      function (res) {
-                          console.log(res);
-                          console.log(res.data.data.list_size);
-                          _this.users = res.data.data.book_list;
-                          console.log(_this.users);
-                          setTimeout(function () {  
-                            layui.form.render();//延迟重新渲染
-                          },10);
-                      }
-                   )
-                  .catch(function (error) { // 请求失败处理
-                    console.log(error);
-                  });
+                var storage = window.localStorage;
+                var result = storage.getItem("book_list");
+                //localStorage.removeItem("book_list");
+                var book_list = JSON.parse(result);
+                console.log(result);
+                _this.users = book_list;
+                console.log(_this.users);
+                setTimeout(function () {  
+                layui.form.render();//延迟重新渲染
+                },10);
+                //axios
+                //  .post('http://119.3.179.137:8080/book/getStoreBookListWithLimit',
+                //        params,)
+                //  .then(
+                //        //response => (this.info = response)
+                //      function (res) {
+                //          console.log(res);
+                //          console.log(res.data.data.list_size);
+                //          _this.users = res.data.data.book_list;
+                //          console.log(_this.users);
+                //          setTimeout(function () {  
+                //            layui.form.render();//延迟重新渲染
+                //          },10);
+                //      }
+                //   )
+                //  .catch(function (error) { // 请求失败处理
+                //    console.log(error);
+                //  });
                //axios
                //     .post('http://119.3.179.137:8080/admin/getRoleList')
                //     .then(
