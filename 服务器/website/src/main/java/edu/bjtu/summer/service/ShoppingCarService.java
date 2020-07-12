@@ -17,11 +17,11 @@ import java.util.Map;
 
 public class ShoppingCarService {
 
-    public List<ShoppingCarDetail> getUserCarInfo(int user_id){
+    public List<Map<String, String>> getUserCarInfo(int user_id){
         SqlSession sqlSession = MybatisUtil.getSession();
         ShoppingCarMapper mapper = sqlSession.getMapper(ShoppingCarMapper.class);
 
-        return mapper.getCarDetailByUserId(user_id);
+        return mapper.getCarDetailAndBookInfoByUserId(user_id);
     }
 
     public boolean addBook(int user_id, long book_id, int amount, double unit_price){
@@ -71,7 +71,8 @@ public class ShoppingCarService {
         BookMapper bookMapper = sqlSession.getMapper(BookMapper.class);
 
         List<ShoppingCarDetail> carDetailList = carMapper.getCarDetailByUserId(user_id);
-        long order_id = orderMapper.getMaxOrderId() + 1;
+        long order_id_temp = orderMapper.getMaxOrderId() + 1;
+        String order_id = String.valueOf(order_id_temp);
 
         // 计算总价
         double total_price = 0;

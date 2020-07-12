@@ -43,7 +43,7 @@ public class UserService {
         SqlSession sqlSession = MybatisUtil.getSession();
         UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
 
-        return userMapper.getUserListWithLimit(left, right);
+        return userMapper.getUserListWithLimit(left, right - left + 1);
     }
 
     public boolean updateUser(User user){

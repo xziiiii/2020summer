@@ -15,7 +15,7 @@ public class BookService {
         SqlSession sqlSession = MybatisUtil.getSession();
         BookMapper bookMapper = sqlSession.getMapper(BookMapper.class);
 
-        return bookMapper.getBookListByStoreIdWithLimit(store_id, left, right);
+        return bookMapper.getBookListByStoreIdWithLimit(store_id, left, right - left + 1);
     }
 
     public long addBook(Book book){
@@ -54,14 +54,14 @@ public class BookService {
         SqlSession sqlSession = MybatisUtil.getSession();
         BookMapper bookMapper = sqlSession.getMapper(BookMapper.class);
 
-        return bookMapper.getBookListByCategoryIdWithLimit(cate_id, left, right);
+        return bookMapper.getBookListByCategoryIdWithLimit(cate_id, left, right - left + 1);
     }
 
     public List<Book> getBookListByKeywordWithLimit(String keyword, int left, int right){
         SqlSession sqlSession = MybatisUtil.getSession();
         BookMapper bookMapper = sqlSession.getMapper(BookMapper.class);
 
-        return bookMapper.getBookListByKeywordWithLimit(keyword, left, right);
+        return bookMapper.getBookListByKeywordWithLimit(keyword, left, right - left + 1);
     }
 
     public Map<String, String> getBookAverageRating(long book_id){
@@ -80,7 +80,7 @@ public class BookService {
         SqlSession sqlSession = MybatisUtil.getSession();
         BookMapper bookMapper = sqlSession.getMapper(BookMapper.class);
 
-        return bookMapper.getBookRankListByRatingWithLimit(left, right);
+        return bookMapper.getBookRankListByRatingWithLimit(left, right - left + 1);
     }
 
     public Book getBookByBookId(long book_id){

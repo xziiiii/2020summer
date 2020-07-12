@@ -13,7 +13,7 @@ public class PrivilegeService {
         SqlSession sqlSession = MybatisUtil.getSession();
         PrivilegeMapper mapper = sqlSession.getMapper(PrivilegeMapper.class);
 
-        return mapper.getPrivilegeListWithLimit(left, right);
+        return mapper.getPrivilegeListWithLimit(left, right - left + 1);
     }
 
     public List<Privilege> getRolePrivilege(int role_id){

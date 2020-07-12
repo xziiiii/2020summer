@@ -36,7 +36,7 @@ public interface OrderMapper {
 
     @Insert("INSERT INTO orders (order_id, user_id, payment) " +
             "VALUES (#{order_id}, #{user_id}, #{payment})")
-    void insertOrder(@Param("order_id") long order_id, @Param("user_id") int user_id, @Param("payment") double payment);
+    void insertOrder(@Param("order_id") String order_id, @Param("user_id") int user_id, @Param("payment") double payment);
 
     @Insert("INSERT INTO order_detail " +
             "(order_id, book_id, store_id, mount, unit_price, total_price, image_url, book_name)" +

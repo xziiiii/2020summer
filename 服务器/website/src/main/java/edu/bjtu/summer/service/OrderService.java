@@ -16,7 +16,7 @@ public class OrderService {
         SqlSession sqlSession = MybatisUtil.getSession();
         OrderMapper orderMapper = sqlSession.getMapper(OrderMapper.class);
 
-        return orderMapper.getOrderDetailByStoreIdWithLimit(store_id, left, right);
+        return orderMapper.getOrderDetailByStoreIdWithLimit(store_id, left, right - left + 1);
     }
 
     public User getOrderUser(String order_id){
@@ -37,7 +37,7 @@ public class OrderService {
         SqlSession sqlSession = MybatisUtil.getSession();
         OrderMapper orderMapper = sqlSession.getMapper(OrderMapper.class);
 
-        return orderMapper.getOrderListByUserIdWithLimit(user_id, left, right);
+        return orderMapper.getOrderListByUserIdWithLimit(user_id, left, right - left + 1);
     }
 
     public List<OrderDetail> getOrderDetailListByOrderId(String order_id){

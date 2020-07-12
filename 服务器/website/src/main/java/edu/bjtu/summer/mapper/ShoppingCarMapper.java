@@ -4,11 +4,17 @@ import edu.bjtu.summer.model.ShoppingCarDetail;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ShoppingCarMapper {
 
     @Select("SELECT * FROM shopping_car_detail WHERE user_id = #{user_id}")
     List<ShoppingCarDetail> getCarDetailByUserId(int user_id);
+
+    @Select("SELECT b.book_id, b.name, b.image_url, s.amount, s.unit_price " +
+            "FROM shopping_car_detail s, book_info b " +
+            "WHERE b.book_id = s.book_id AND s.user_id = #{user_id}")
+    List<Map<String, String>> getCarDetailAndBookInfoByUserId(int user_id);
 
     @Select("SELECT * FROM shopping_car_detail WHERE user_id = #{user_id} AND book_id = #{book_id}")
     ShoppingCarDetail getCarDetailByUserIdAndBookId(@Param("user_id") int user_id, @Param("book_id") long book_id);

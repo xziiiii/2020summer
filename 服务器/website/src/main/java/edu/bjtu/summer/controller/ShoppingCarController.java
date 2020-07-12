@@ -23,7 +23,7 @@ public class ShoppingCarController {
         }
 
         JsonTemplate jsonTemplate = new JsonTemplate(1);
-        List<ShoppingCarDetail> detailList = carService.getUserCarInfo(Integer.parseInt(user_id));
+        List<Map<String, String>> detailList = carService.getUserCarInfo(Integer.parseInt(user_id));
         jsonTemplate.addData("list_size", detailList.size());
         jsonTemplate.addData("car_list", detailList);
 
