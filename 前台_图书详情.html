@@ -1,0 +1,327 @@
+﻿<!DOCTYPE html>
+<html class="x-admin-sm">
+    
+<head>
+    <meta charset="UTF-8">
+    <title>前台_图书详情</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="stylesheet" href="./css/font.css">
+    <link rel="stylesheet" href="./css/xadmin.css">
+    <script type="text/javascript" src="./lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+        <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+        <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- vue	-->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
+    <script src="https://cdn.staticfile.org/axios/0.18.0/axios.min.js"></script>
+    <script src="https://cdn.staticfile.org/vue-router/2.7.0/vue-router.min.js"></script>
+    <script type="text/javascript" src="./js/jquery-3.5.0.js"></script>
+
+</head>
+<body>
+    <div class="layui-fluid" id="app">
+        <!--<div class="layui-row">-->
+        <form class="layui-form">
+            <!--<div class="layui-form-item">-->
+            <!--<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;订单号:{{ order_id }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;总金额：{{order_payment}}</p>-->
+            <!--<label for="username" class="layui-form-label">
+                <span class="x-red"></span>订单号:
+            </label>
+            <div class="layui-input-inline">
+                <br>
+            </div>-->
+            <!--</div>-->
+            <div style="padding: 20px; background-color: #F2F2F2;">
+                <div class="layui-row layui-col-space15">
+                    <div class="layui-col-md12">
+                        <img v-bind:src="image_url">
+                    </div>
+                    <div class="layui-col-md12">
+                        <div class="layui-card">
+                            <div class="layui-card-header"><p style="font-size: 17px;">《{{name}}》</p></div>
+                            <div class="layui-card-body">
+                                {{outline}}<br>
+                                {{detail}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md12">
+                        <div class="layui-card">
+                            <!--<div class="layui-card-header"></div>-->
+                            <div class="layui-card-body">
+                                <p style=" color: black; font-size: 14px;">
+                                    作者：{{author}}&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+                                    出版社：{{press}}&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+                                    出版日期：{{publish_date}}
+                                </p>
+                                <p style=" color: grey; font-size: 14px;">
+                                    图书大小：{{size}}&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;页数：{{pages}}&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;种类：{{cname}}
+                                    &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;包装类型：{{pack_style}}&nbsp;&nbsp;&nbsp;|
+                                    &nbsp;&nbsp;&nbsp;交易数量：{{deal_mount}}&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;库存：{{store_mount}}
+                                </p>
+                                <!--图书大小：{{size}}
+                                页数：{{pages}}
+                                种类：{{cname}}
+                                包装类型：{{pack_style}}<br>
+                                市场价：{{market_price}}
+                                会员价：{{member_price}}
+                                折扣：{{discount}}<br>
+                                库存：{{store_mount}}
+                                交易数量：{{deal_mount}}-->
+                                <fieldset class="layui-elem-field">
+                                    <!--<legend></legend>-->
+                                    <div class="layui-field-box" style="background-color:#FFB800;">
+                                        <p style="color: red; font-size: 18px;">
+                                            <a style="font-size: 15px;">价格：</a>￥{{price}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <a style="font-size: 15px;">折扣：</a><a v-if="discount==0.0">无</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <a v-else style="color: red; font-size: 18px;">{{discount}}折</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <a style="font-size: 15px;">市场价：</a>￥{{market_price}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <a style="font-size: 15px;">会员价：</a><a v-if="market_price==0.0">无</a>
+                                            <a v-else style="color: red; font-size: 18px;">￥{{member_price}}</a>
+                                        </p>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-col-md12">
+                        <!--<button v-on:click="subtract(index)">-</button>
+                        <input type="text" value="0" size="1" id="ef">
+                        <button v-on:click="add(index)">+</button>-->
+                    </div>
+
+
+                </div>
+                <div class="layui-col-md12">
+                    <!--加减功能  文本框数量-->
+                    <div class="sum_cont">
+                        <label class="minute" @click="btn_minute()">-</label>
+                        <input class="input" v-model="num" />
+                        <label class="add" @click="btn_add()">+</label>
+                    </div>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button v-on:click="addCart()" type="button" class="layui-btn layui-btn-danger">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;加入购物车&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+
+    <style>
+        /*清除一下margin-padding*/
+
+        /* 总数量*/
+        .sum_cont {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            right: 600px;
+            bottom: 10px;
+            width: 130px;
+            height: 30px;
+            line-height: 30px;
+        }
+        /*减号*/
+
+        .minute {
+            position: absolute;
+            width: 25px;
+            text-align: center;
+            height: 30px;
+            line-height: 30px;
+            left: 10px;
+            font-size: 18px;
+            border: 1px solid #DD524D;
+        }
+        /*加号*/
+
+        .add {
+            width: 25px;
+            border: 1px solid #DD524D;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            position: absolute;
+            right: 10px;
+            font-size: 18px;
+        }
+        /*文本框*/
+
+        .input {
+            width: 40px;
+            height: 26px;
+            display: inline-block;
+            line-height: 30px;
+            text-align: center;
+            position: absolute;
+            right: 45px;
+        }
+    </style>
+
+    <script>
+        layui.use(['form', 'layer'],
+            function () {
+                $ = layui.jquery;
+                var form = layui.form,
+                    layer = layui.layer;
+
+                //监听提交
+                form.on('submit(edit)',
+                    function (data) {
+                        //关闭当前frame
+                        xadmin.close();
+                        // 可以对父窗口进行刷新
+                        //xadmin.father_reload();
+                        return false;
+                    });
+
+            });
+    </script>
+    <script>
+        var _hmt = _hmt || []; (function () {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+    <script>
+        jQuery.support.cors = true;
+        var app = new Vue({
+            el: '#app',
+            data: {
+                users: [],
+                user_id: "",
+                book_id: "",
+                num: 1,
+                name: "--",
+                outline: "--",
+                detail: "--",
+                press: "--",
+                publish_date: "--",
+                size: "",
+                author: "",
+                translator: "--",
+                price: "--",
+                pages: "--",
+                market_price: "--",
+                member_price: "",
+                deal_mount: "",
+                discount: "",
+                image_url: "",
+                store_mount: "--",
+                store_time: "",
+                pack_style: "",
+                cname: ""
+            },
+            created() {
+                this.getParams();
+            },
+            mounted: function () {
+            },
+            methods: {
+                 //添加
+                btn_add: function () {
+                    var n = this.num;
+                    n = n + 1;
+                    this.num = n;
+                },
+                //减去
+                btn_minute: function () {
+                    var n = this.num;
+                    if (n > 1) {
+                        n = n - 1;
+                        this.num = n;
+                    }
+                },
+                addCart: function () {
+                    const param = new URLSearchParams();
+                    param.append('user_id', 1);
+                    param.append('book_id', this.book_id);
+                    param.append('amount', this.num);
+                    param.append('unit_price', this.price);
+                    console.log(param);
+                    axios
+                      .post('http://119.3.179.137:8080/shopping_car/addBook',
+                          param)
+                      .then(
+                          function (res) {
+                              console.log(res);
+                              if (res.data.code == 0) {
+                                  layer.msg("添加失败");
+                                 //alert('添加错误！')
+                              } else {
+                                  layer.msg("添加成功");
+                                  xadmin.close();
+                              }
+                          }
+                      )
+                      .catch(function (error) { // 请求失败处理
+                      console.log(error);
+                      });
+                },
+                async getParams() {
+                    // 取到路由带过来的参数
+                    _this = this;
+                    if (!window.localStorage) {
+                        alert("浏览器不支持localstorage");
+                    } else {
+                        var storage = window.localStorage;
+                        var book_item = storage.getItem("front_book_item");
+                        localStorage.removeItem("front_book_item");
+                        var jbook_item = JSON.parse(book_item);
+                        console.log(jbook_item);
+                        _this.book_id = jbook_item.book_id;
+                        _this.name = jbook_item.name;
+                        _this.outline = jbook_item.outline;
+                        _this.detail = jbook_item.detail;
+                        _this.press = jbook_item.press;
+                        _this.publish_date = jbook_item.publish_date;
+                        _this.size = jbook_item.size;
+                        _this.author = jbook_item.author;
+                        _this.translator = jbook_item.translator;
+                        _this.price = jbook_item.price;
+                        _this.pages = jbook_item.pages;
+                        _this.market_price = jbook_item.market_price;
+                        _this.member_price = jbook_item.member_price;
+                        _this.deal_mount = jbook_item.deal_mount;
+                        _this.discount = jbook_item.discount;
+                        _this.image_url = jbook_item.image_url;
+                        _this.store_mount = jbook_item.store_mount;
+                        _this.store_time = jbook_item.store_time;
+                        _this.pack_style = jbook_item.pack_style;
+                        _this.cname = jbook_item.cname;
+                    }
+                }
+            },
+            updated: function () {
+                //var _this = this;
+                //if(_this.form){
+                //_this.form.render();
+                //}
+                //this.$nextTick(function () {
+                //    layui.use(['form'], function () {
+                //        form.render();
+                //    });
+                //});
+
+            },
+            watch: {
+                '$route': 'getParams'
+            },
+        })
+    </script>
+</body>
+
+</html>
