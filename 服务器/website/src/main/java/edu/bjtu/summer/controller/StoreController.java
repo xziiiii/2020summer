@@ -66,14 +66,15 @@ public class StoreController {
 
     @RequestMapping("/admin/deleteStore")
     public JsonTemplate deleteStore(@RequestParam(value = "store_id", required = false) String store_id){
-        if (store_id == null || store_id.equals("")){
-            return new JsonTemplate(0);
-        }
-
-        if (storeService.deleteStore(Integer.parseInt(store_id))){
-            return new JsonTemplate(1);
-        }else{
-            return new JsonTemplate(0);
-        }
+        return new JsonTemplate(0);
+//        if (store_id == null || store_id.equals("")){
+//            return new JsonTemplate(0);
+//        }
+//
+//        if (storeService.deleteStore(Integer.parseInt(store_id))){
+//            return new JsonTemplate(1);
+//        }else{
+//            return new JsonTemplate(0);
+//        }
     }
 }

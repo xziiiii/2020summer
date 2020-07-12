@@ -1,6 +1,7 @@
 package edu.bjtu.summer.service;
 
 import edu.bjtu.summer.mapper.BookMapper;
+import edu.bjtu.summer.mapper.ShoppingCarMapper;
 import edu.bjtu.summer.model.Book;
 import edu.bjtu.summer.model.BookCategory;
 import edu.bjtu.summer.util.MybatisUtil;
@@ -39,8 +40,15 @@ public class BookService {
     public boolean deleteBook(long book_id){
         SqlSession sqlSession = MybatisUtil.getSession();
         BookMapper bookMapper = sqlSession.getMapper(BookMapper.class);
+        ShoppingCarMapper carMapper = sqlSession.getMapper(ShoppingCarMapper.class);
 
-        return bookMapper.deleteBook(book_id);
+        boolean result = bookMapper.deleteBook(book_id);
+        carMapper.deleteCarDetailByBookId(book_id);
+
+        sqlSession.commit();
+        sqlSession.close();
+
+        return result;
     }
 
     public List<BookCategory> getBookCategoryList(){

@@ -11,9 +11,11 @@ public class TestMapper {
 
     public static void main(String[] args) {
         SqlSession sqlSession = MybatisUtil.getSession();
-        BookMapper bookMapper = sqlSession.getMapper(BookMapper.class);
+        ShoppingCarMapper carMapper = sqlSession.getMapper(ShoppingCarMapper.class);
 
-        List<Map<String, String>> map = bookMapper.getBookRankListByRatingWithLimit(1, 5);
+        carMapper.deleteCarDetailByBookId(100);
+        sqlSession.commit();
+        sqlSession.close();
 
         System.out.println("");
     }

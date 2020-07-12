@@ -35,4 +35,7 @@ public interface ShoppingCarMapper {
     @Delete("DELETE FROM shopping_car_detail WHERE user_id = #{user_id}")
     boolean deleteCarDetailByUId(@Param("user_id") int user_id);
 
+    @Delete("DELETE FROM shopping_car_detail WHERE book_id = #{book_id}")
+    boolean deleteCarDetailByBookId(@Param("book_id") long book_id);
+
 }
