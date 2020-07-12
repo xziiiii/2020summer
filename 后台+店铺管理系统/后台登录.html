@@ -1,0 +1,236 @@
+﻿
+<!doctype html>
+<html  lang="en">
+
+    <head>
+        <!-- meta data -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+        <!--font-family-->
+		<link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&amp;subset=devanagari,latin-ext" rel="stylesheet">
+        
+        <!-- title of site -->
+        <title>后台登录</title>
+
+        <!-- For favicon png -->
+		<!--<link rel="shortcut icon" type="image/icon" href="assets/logo/favicon.png"/>-->
+       
+        <!--font-awesome.min.css-->
+        <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+		
+		<!--animate.css-->
+        <link rel="stylesheet" href="assets/css/animate.css">
+		
+        <!--bootstrap.min.css-->
+        <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+		
+		<!-- bootsnav -->
+		<link rel="stylesheet" href="assets/css/bootsnav.css" >	
+        
+        <!--style.css-->
+        <link rel="stylesheet" href="assets/css/style.css">
+        
+        <!--responsive.css-->
+        <link rel="stylesheet" href="assets/css/responsive.css">
+        
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		
+        <!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+			<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+<!--	vue	-->
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
+		<script src="https://cdn.staticfile.org/axios/0.18.0/axios.min.js"></script>
+
+    </head>
+	
+	<body>
+		<!--[if lte IE 9]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+        <![endif]-->
+		
+		<!-- signin end -->
+		<section class="signin">
+			<div class="container">
+
+				<div class="sign-content" id="app">
+					<h2>登&nbsp;&nbsp;录</h2>
+					
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="signin-form">
+								<form action="signin.html">
+									<div class="form-group">
+									    <label for="signin_form">账号</label>
+									    <input v-model="user_id" type="email" class="form-control" id="user_id" placeholder="输入账号">
+									</div><!--/.form-group -->
+									<div class="form-group">
+										<label for="signin_form">密码</label>
+									    <input v-model="password" type="password" class="form-control" id="signin_form" placeholder="输入密码">
+									</div><!--/.form-group -->
+								</form><!--/form -->
+							</div><!--/.signin-form -->
+							<div id="message">
+								<!--<div v-if="type === 'A'">
+								  请输入账号和密码
+								</div>
+								<div v-else-if="type === 'B'">
+								  密码错误
+								</div>
+								<div v-else-if="type === 'C'">
+								  账号不存在
+								</div>
+								<div v-else>
+
+								</div>-->
+<!--								<p v-if="seen">{{ message }}</p>-->
+							</div>
+						</div><!--/.col -->
+					</div><!--/.row -->
+
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="signin-footer">
+								<button type="button" class="btn signin_btn" data-toggle="modal" data-target=".signin_modal" v-on:click="signin">
+								登&nbsp;&nbsp;录
+								</button>
+								<!--<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;没有账号?
+									<a href="注册.html">&nbsp;&nbsp;注册</a>
+								</p>-->
+							</div><!--/.signin-footer -->
+						</div><!--/.col-->
+					</div><!--/.row -->
+
+				</div><!--/.sign-content -->
+			</div><!--/.container -->
+
+		</section><!--/.signin -->
+		<!-- signin end -->
+
+
+		 <!-- Include all js compiled plugins (below), or include individual files as needed -->
+		<script src="assets/js/jquery.js"></script>
+        <!--modernizr.min.js-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+		<!--bootstrap.min.js-->
+        <script src="assets/js/bootstrap.min.js"></script>
+		<!-- bootsnav js -->
+		<script src="assets/js/bootsnav.js"></script>
+		<!-- jquery.sticky.js -->
+		<script src="assets/js/jquery.sticky.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+        <!--Custom JS-->
+        <script src="assets/js/custom.js"></script>
+
+<!--		<script src="https://unpkg.com/vue"></script>-->
+		<script>
+		//window.onload = function(){
+    //var vm = new Vue({
+       // el:'#app',
+      //  data:{
+       //     user_id: "",
+        //    password: "",
+        //    type: ""
+        //},
+       // methods:{
+       //     post:function(){
+       //         alert(this.user_id+this.password);
+       //         //发送 post 请求
+       //         this.$http.signin('http://124.70.51.104:8080/login',{user_id:this.user_id,password:this.password},{emulateJSON:true}).then(function(res){
+       //             alert(res.body);
+       //         },function(res){
+       //             console.log(res.status);
+       //         });
+       //     }
+       // }
+    //});
+//}
+		</script>
+	<script>
+	   var app = new Vue({
+			  el: '#app',
+			  data: {
+				user_id: "",
+				password: "",
+				type: ""
+			  },
+			  methods: {
+				signin: function () {
+				    console.log(this.user_id+" "+this.password);
+				    if (this.user_id=="" || this.password=="") {
+						    alert("请输入名称和密码！");
+						    //this.type="A";
+						    }
+                    else {
+						var myname = document.getElementById("user_id");
+						localStorage.setItem("username",myname.value);
+
+						
+                        const params = new URLSearchParams();
+                        params.append('user_id', this.user_id);
+                        params.append('password', this.password);
+						localStorage.setItem("lastname", "？");
+                        var n = { 'user_id': this.user_id, 'password': this.password };
+                        //var data = JSON.stringify(n);
+                        //var data =Qs.stringify(n);
+                        console.log(n);
+                        console.log(params);
+                        axios.post('http://119.3.179.137:8080/admin/login',
+                            params,
+                        )
+                        .then(
+                            function (res) {
+								var i = 1;
+								console.log(res);
+								if (res.data.code == 1) {
+									alert("登陆成功");
+									console.log("登陆成功");
+
+									//储存用户名
+									var myname = document.getElementById("user_id");
+                                    localStorage.setItem("username", myname.value);
+                                    localStorage.setItem("role_id",res.data.role.role_id);
+						            //localStorage.setItem("role_id",res.data.role.role_id);
+                                    window.location.href = "/admin_index";
+									//if (i == 1)
+									//	window.location.href = "后台管理.html";
+									//else if (i == 2)
+									//	window.location.href = "店铺管理.html";
+									//else if (i == 3)
+									//    window.location.href = "x.html";
+
+								} else {
+									alert("登陆验证失败");
+                                    console.log("登陆验证失败");
+                                    var myname = document.getElementById("user_id");
+                                    localStorage.setItem("username", myname.value);
+                                    localStorage.setItem("role_id",1);
+						            //localStorage.setItem("role_id",res.data.role.role_id);
+                                    window.location.href = "/admin_index";
+								}
+					          //vm.answer = _.capitalize(response.data.answer)
+                            }
+                        )
+				        .catch(function (error) {
+                            console.log(error);
+				           alert("登录失败！");
+				          //vm.answer = 'Error! Could not reach the API. ' + error
+					           })
+				    }
+				}
+			  }
+		})
+	</script>
+
+
+
+    </body>
+	
+</html>
