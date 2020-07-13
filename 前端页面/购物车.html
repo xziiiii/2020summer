@@ -1,566 +1,497 @@
-<!doctype html>
-<html lang="en">
+﻿<!DOCTYPE html>
+<html class="x-admin-sm">
+
 <head>
-<meta charset="UTF-8" />
-<title>首页</title>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.2</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+        content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="stylesheet" href="./css/font.css">
+    <link rel="stylesheet" href="./css/xadmin.css">
+    <link rel="stylesheet" href="./css/cart.css">
+    <script src="./lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./js/xadmin.js"></script>
+    <!--[if lt IE 9]>
+          <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+          <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    <!-- vue	-->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
+    <script src="https://cdn.staticfile.org/axios/0.18.0/axios.min.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+    <script src="https://cdn.staticfile.org/vue-router/2.7.0/vue-router.min.js"></script>
 
-<link rel="stylesheet" href="css/base.css" />
-<link rel="stylesheet" href="css/layout.css"/>
-
-<script type="text/javascript" src="js/jquery.min.js"></script>
-<script type="text/javascript" src="js/jquery.SuperSlide.js"></script>
-<script src="js/jquery.min.js"></script>
-<script src="js/vue.min.js"></script>
 </head>
+
 <body>
+    <div class="x-nav">
+        <span class="layui-breadcrumb">
+            <a href="">首页</a>
+            <a href="">演示</a>
+            <a>
+                <cite>导航元素</cite></a>
+        </span>
+        <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+            onclick="location.reload()" title="刷新">
+            <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i></a>
+    </div>
+    <div class="layui-fluid" id="app">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-body ">
+                    </div>
+                    <div class="layui-card-body layui-table-body layui-table-main">
+                        <!-- <div id="app"> -->
+                        <!-- <h1>购物清单</h1> -->
+                        <table>
+                            <thead>
+                                <tr>
+                                    <!-- <td>
+                                        <input type="checkbox" v-on:click="selectAll(isSelectAll)">
+                                        <label for="all">全选</label>
+                                    </td> -->
+                                    <td width="200"></td>
+                                    <td width="400">商品名称</td>
+                                    <td>单价</td>
+                                    <td>数量</td>
+                                    <td>金额</td>
+                                    <td>操作</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(item, index) in cars" :key="item.id">
+                                    <!-- <td>
+                                        <input type="checkbox" name="" id="" v-model="item.selected">
+                                    </td> -->
+                                    
+                                    <td>
+                                        <!-- <img :src="item.img"> -->
+                                        <img v-bind:src="item.image_url">
+                                        
+                                       <!-- <div class="info">
+                                            
+                                            
+                                            
+                                             <p>品牌：{{ item.brand }} 产地：{{ item.origin }}</p>
+                                                <p>规格/纯度:{{ item.purity }} 起定量：215千克</p>
+                                                <p>配送仓储：{{ item.warehouse }}</p> 
+                                        </div>-->
+                                    </td>
+                                    <td><h6 style="font-size: 16px;">{{ item.name}}</h6></td>
+                                    <!-- <td><h6 style="font-size: 16px;">{{ item.book_id}}</h6></td> -->
+                                    
+                                    <td>{{ item.unit_price }}</td>
+                                    <td>
+                                        <div class="num"><span v-on:click="edit3(item)">+</span><input type="text"
+                                                name="" id="" v-model="item.amount"><span
+                                                v-on:click="edit2(item)">-</span></div>
+                                    </td>
+                                    <td>{{ item.unit_price * item.amount }}</td>
+                                    <!-- <td><button v-on:click="deleteNowGoods(index)">删除</button></td> -->
+                                    <td><button v-on:click="edit(item)" class="layui-btn layui-btn-danger"><i class="iconfont">&#xe69d;</i></button></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
 
-<div id="wrapper">
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2"><button v-on:click="edit4" class="layui-btn layui-btn-danger"><i class="iconfont">&#xe69d;</i>&nbsp;清空购物车</button></td>
+                                    <td colspan="4" class="text-right">
+                                        {{ getGoodsNums.goodsNum }}&nbsp;件商品(不含运费)：{{ getGoodsNums.goodsPrice }}元
+                                        <button class="layui-btn" v-on:click="edit5" style="margin-left: 10px;">&nbsp;&nbsp;&nbsp;结算&nbsp;&nbsp;&nbsp;
+                                        </button>
+                                    </td>
 
-	<header id="header">
-	
-		<div id="loginBar">
-			<div class="w960 tr">
-				<a href="#">登录</a> <span class="sp">|</span> <a href="#">注册</a>
-			</div>
-		</div>
-		
-		<!-- <div id="headBox">
-			<div class="w960 oh">
-				<a href="#" class="fl mt10">住宅专项维修资金综合管理平台</a>
-				<nav id="navs" class="fr">
-				<a href="#">当前页面</a>
-				<a class="active" href="#">返回</a>
-				</nav>
-			</div>
-		</div> -->
-		<div class="head-v3" id="index">
-			<div class="navigation-up">
-					<div class="navigation-v3">
-						<ul>
-							<ul>
-								<!-- 默认被选中项 -->
-								<li :class="i.id == 1 ? 'nav-up-selected-inpage' : ''" v-for="i in nevigatelist" :_t_nav="i.nav">
-									<h2>
-										<a href="#">{{i.label}}</a>
-									</h2>
-								</li>
-							</ul>
-						</ul>
-					</div>
-			</div>
-			<div class="navigation-down">
-				<div v-for="i in navdetails" :id="i.id" :class="i.id == 'product' ? ['nav-down-menu','menu-1'] : ['nav-down-menu','menu-3','menu-1']" style="display: none;" :_t_nav="i.id">
-					<div class="navigation-down-inner">
-						<dl v-for="item in i.childrenlist" :style="item.id == '1' ? {'margin-left': i.leftlength}:''">
-							<dt v-if="item.label !=''">{{item.label}}</dt>
-							<dd v-for="y in item.hreflist">
-								<a class="link" href="#">{{y.label}}</a>
-							</dd>
-						</dl>
-					</div>
-					
-				</div>
-			</div>
-		</div>
+                                </tr>
+                            </tfoot>
+                        </table>
 
-
-	</header><!-- // header end --> 
-	
-	<div class="container w960 mt20">
-	<!--------上-------->
-		<!-- <div id="processor" >
-			<h1>图书分类</h1>
-			<p>
-			
-			</p>
-		</div>
-		<div id="processor" >
-			<h1>Top 10</h1>
-			<p>
-			
-			</p>
-		</div> -->
-		
-		<!----------商品列表---------->
-		<div class="index_focus">
-			<div id="app">
-				<h3>商品总数：{{length}}</h3>
-				<div class="biaoti" >
-					<ul  >
-						
-						<li> <input type="checkbox" id="sure" v-model="fv" @click="sd"  ><label for="checkbox">全选</label></li>
-						<li>商品</li>
-						<li>单价</li>
-						<li>数量</li>
-						<li>小计</li>
-						<li>操作</li>
-					</ul>
-				</div>
-				<div class="liebiao" id="list">
-					<ul id="fff" class="et"  v-for="(e,index) in we">
-						<li> <input type="checkbox" id="be" v-model="e.checked" @click="wq(index)"></li>
-									  
-						<li><img :src="e.url"/></li>
-						<li>{{e.message}}</li>
-						<li>{{e.price}}</li>
-						<li><button v-on:click="subtract(index)">-</button>
-							<input type="text" value="0" size="1" id="ef" v-model="e.num">
-							<button v-on:click="add(index)">+</button>
-						</li>
-						<li>{{wer(index)}}</li>
-						<li @click="fun(index)">删除</li>
-						
-					</ul>
-				   
-				   <div v-if="!we.length">当前没有商品，请添加商品。</div>
-				   <div id="aq"  :class={ghj:but}>
-						<span > 已选择{{sde()}}件商品</span>  <span class="weq">合计{{wry()}}</span> <button  @click="ed">清空购物车</button>
-				   </div>
-					
-				</div>
-			</div>
-		
-		</div>
-
-	</div>   <!-- // container end -->
-
-	<footer id="footer" class="w960 oh">
-		<span class="fl">底部底部</span>
-		<nav class="footNavs tr fr">
-			<a href="#">底部</a>
-			<span class="sp">|</span>
-			<a href="#">底部</a>
-		</nav>
-	</footer><!-- // footer end -->
-	
-</div><!-- // wrapper end -->
-<style>
-
-</style>
-
-<!-- 顶部导航栏 -->
-<script type="text/javascript">
-	jQuery(document).ready(function() {
-		var qcloud = {};
-		$('[_t_nav]').hover(function() {
-			var _nav = $(this).attr('_t_nav');
-			clearTimeout(qcloud[_nav + '_timer']);
-			qcloud[_nav + '_timer'] = setTimeout(function() {
-				$('[_t_nav]').each(function() {
-					$(this)[_nav == $(this).attr('_t_nav') ? 'addClass' : 'removeClass']('nav-up-selected');
-				});
-				$('#' + _nav).stop(true, true).slideDown(200);
-			}, 150);
-		}, function() {
-			var _nav = $(this).attr('_t_nav');
-			clearTimeout(qcloud[_nav + '_timer']);
-			qcloud[_nav + '_timer'] = setTimeout(function() {
-				$('[_t_nav]').removeClass('nav-up-selected');
-				$('#' + _nav).stop(true, true).slideUp(200);
-			}, 150);
-		});
-	});
-
-	new Vue({
-		el: "#index",
-		data: {
-			/* 导航标题 */
-			nevigatelist: [{
-				id: '1',
-				nav: 'home',
-				label: '首页',
-			},  {
-				id: '2',
-				nav: 'tsfl',
-				label: '图书分类',
-			}, {
-				id: '3',
-				nav: 'grzl',
-				label: '个人资料',
-			}, {
-				id: '4',
-				nav: 'ddgl',
-				label: '订单管理',
-			}, {
-				id: '5',
-				nav: 'support',
-				label: '购物车',
-			}, ],
-			/* 导航内明细列表 */
-			navdetails: [
-			    {
-					id: 'tsfl',
-					leftlength : '120px',
-					childrenlist: [{
-							id: '1',
-							/* 列表标题 */
-							label: '',
-							/* 标题下内容列表 */
-							hreflist: [{
-								label: '文艺',
-								href: '#',
-							}, ]
-						},{
-							id: '2',
-							/* 列表标题 */
-							label: '',
-							/* 标题下内容列表 */
-							hreflist: [{
-								label: '教育',
-								href: '#',
-							}, ]
-						},{
-							id: '3',
-							/* 列表标题 */
-							label: '',
-							/* 标题下内容列表 */
-							hreflist: [{
-								label: '人文社科',
-								href: '#',
-							}, ]
-						},{
-							id: '4',
-							/* 列表标题 */
-							label: '',
-							/* 标题下内容列表 */
-							hreflist: [{
-								label: '励志',
-								href: '#',
-							}, ]
-						},
-						{
-							id: '5',
-							/* 列表标题 */
-							label: '',
-							/* 标题下内容列表 */
-							hreflist: [{
-								label: '生活',
-								href: '#',
-							}, ]
-						},
-						{
-							id: '6',
-							/* 列表标题 */
-							label: '',
-							/* 标题下内容列表 */
-							hreflist: [{
-								label: '经营',
-								href: '#',
-							}, ]
-						},
-						{
-							id: '7',
-							/* 列表标题 */
-							label: '',
-							/* 标题下内容列表 */
-							hreflist: [{
-								label: '科技',
-								href: '#',
-							}, ]
-						},
-						{
-							id: '8',
-							/* 列表标题 */
-							label: '',
-							/* 标题下内容列表 */
-							hreflist: [{
-								label: '期刊',
-								href: '#',
-							}, ]
-						},
-					]
-				},
-				// {
-				// 	id: 'grzl',
-				// 	leftlength : '235px',
-				// 	childrenlist: [{
-				// 			id: '1',
-				// 			/* 列表标题 */
-				// 			label: '',
-				// 			/* 标题下内容列表 */
-				// 			hreflist: [{
-				// 				label: '微信',
-				// 				href: '#',
-				// 			}, ]
-				// 		},{
-				// 			id: '2',
-				// 			/* 列表标题 */
-				// 			label: '',
-				// 			/* 标题下内容列表 */
-				// 			hreflist: [{
-				// 				label: '游戏',
-				// 				href: '#',
-				// 			}, ]
-				// 		},{
-				// 			id: '3',
-				// 			/* 列表标题 */
-				// 			label: '',
-				// 			/* 标题下内容列表 */
-				// 			hreflist: [{
-				// 				label: '移动应用',
-				// 				href: '#',
-				// 			}, ]
-				// 		},
-				// 	]
-				// },{
-				// 	id:'cooperate',
-				// 	leftlength : '480px',
-				// 	childrenlist:[
-				// 		{
-				// 			id: '1',
-				// 			/* 列表标题 */
-				// 			label: '',
-				// 			/* 标题下内容列表 */
-				// 			hreflist: [{
-				// 				label: '代理商',
-				// 				href: '#',
-				// 			}, ]
-				// 		},{
-				// 			id: '2',
-				// 			/* 列表标题 */
-				// 			label: '',
-				// 			/* 标题下内容列表 */
-				// 			hreflist: [{
-				// 				label: '微信服务商',
-				// 				href: '#',
-				// 			}, ]
-				// 		},{
-				// 			id: '3',
-				// 			/* 列表标题 */
-				// 			label: '',
-				// 			/* 标题下内容列表 */
-				// 			hreflist: [{
-				// 				label: '创投机构',
-				// 				href: '#',
-				// 			}, ]
-				// 		},
-				// 	],
-				// }
-			],
-		},
-		mounted: function() {
-
-		},
-		methods: {
-
-		}
-	})
-</script>
-<!-- 商品列表 -->
-<!-- <script type="text/javascript">
-	new Vue({
-			el:'#box',
-			data:{
-				json:{
-					list:[
-						{
-							src:'images/1.jpg',
-							des:'书名1',
-							price:1
-						},
-						{
-							src:'images/1.jpg',
-							des:'书名2',
-							price:13
-						},
-						{
-							src:'images/1.jpg',
-							des:'书名3',
-							price:34
-						},
-						{
-							src:'images/1.jpg',
-							des:'书名4',
-							price:43
-						},
-						{
-							src:'images/1.jpg',
-							des:'书名5',
-							price:22
-						},
-						{
-							src:'images/1.jpg',
-							des:'书名6',
-							price:67
-						}
-					]
-				}
-			}
-		})
-</script> -->
-<script type="text/javascript">
-var we = new Vue({
-	el:"#app",
-	data:{
-        fv:false,
-		arr:[],
-		et:"df",
-        bb:"",
-		ws:"",
-		wert:0,
-	    er:"",
-		but:false,
-		we:[
-		{url:"./img/5adef3e6N3b3d085a.jpg",message:"商品1",price:32.90,num:0,checked:false},
-		{url:"./img/5b6299fdNa2588a6a.jpg",message:"商品2",price:109.00,num:0,checked:false},
-		{url:"./img/5b779a23N8e4604a5.jpg",message:"商品3",price:59.90,num:0,checked:false},
-		{url:"./img/5b7cb4b6Nce1debe2.jpg",message:"商品4",price:37.90,num:0,checked:false},
-		{url:"./img/5bc040b3N96bdc3cd.jpg",message:"商品5",price:19.90,num:0,checked:false}
-		]
-	},methods:{
-		ed:function(){
-			this.we="";
-			this.but=true;
-			this.fv=false;
-			document.getElementById("sure").disabled="disabled";
-
-		},
-		add:function(e){
-			this.we[e].num++;
-
-
-		},
-		subtract:function(e){
-			if (this.we[e].num<=0){
-				alert('商品已是最小数量')
-				this.count=0;
-			}else {
-				this.we[e].num-=1;
-			}
-		},
-		wq:function(e){
-			//点击方框
-			//console.log(this.we[e].checked)
-			var  arrs=[];
-			this.we[e].checked=!this.we[e].checked
-			if(this.we[e].checked){
-				document.getElementById("list").getElementsByClassName("et")[e].style.backgroundColor="red";
-
-			}else{
-				document.getElementById("list").getElementsByClassName("et")[e].style.backgroundColor="";
-				//this.fv=false;
-			}
-			for (var i = 0;i<this.we.length;i++){
-
-				arrs.push(this.we[i].checked);
-
-			}
-			if(arrs.indexOf(false)==-1){
-				this.fv=true
-
-			}else{
-				this.fv=false
-			}
-
-		},
-
-		fun:function(e){
-			var  arrs=[];
-		   this.ws=e;
-			//console.log(this.ws==0)
-			//删除
-
-           if(this.ws !==(this.we.length-1)){
-			   this.we[this.ws].checked== this.we[this.ws+1].checked;
-
-		   }else{
-
-		   }
-			this.we.splice(e,1)
-			for (var i = 0;i<this.we.length;i++){
-
-				arrs.push(this.we[i].checked);
-
-			}
-			if(arrs.indexOf(false)==-1){
-				this.fv=true
-			}else{
-				this.fv=false
-			}
-			for(var i=0;i<this.we.length;i++){
-				if(this.we[i].checked){
-					document.getElementById("list").getElementsByClassName("et")[i].style.backgroundColor="red";
-				}else{
-					document.getElementById("list").getElementsByClassName("et")[i].style.backgroundColor="";
-				}
-			}
-
-			if(this.we==""){
-				//this.ert=true;
-				this.but=true;
-				this.fv=false;
-				document.getElementById("sure").disabled="disabled";
-
-
-			}
-
-
-		},
-		sd:function(){
-			console.log(this.we.length)
-			if(this.fv){
-				for(var i =0;i<this.we.length;i++){
-					this.we[i].checked=false
-					document.getElementById("list").getElementsByClassName("et")[i].style.backgroundColor="";
-				}
-
-			}else{
-				for(var i =0;i<this.we.length;i++){
-					console.log(i)
-
-					this.we[i].checked=true
-					this.fv=true;
-					document.getElementById("list").getElementsByClassName("et")[i].style.backgroundColor="red";
-				}
-			}
-		},
-		wer:function(index){
-			//this.sxc(index);
-		//	console.log(Math.floor(this.we[index].price*Number(this.we[index].num)))
-			return Math.floor(this.we[index].price*Number(this.we[index].num));
-
-		},
-
-		sde:function(){
-			var  total=0;
-			for(var i=0;i<this.we.length;i++){
-				if(this.we[i].checked){
-					total+=parseInt(this.we[i].num);
-				}
-			}
-           return total;
-         },
-		wry:function(){
-			var  totall=0;
-			for(var i=0;i<this.we.length;i++){
-				if(this.we[i].checked){
-					totall+=parseInt(this.we[i].num*this.we[i].price);
-				}
-			}
-			return totall;
-		}
+                    </div>
 
 
 
-	},computed:{
-		length:function(){
-			return this.we.length;
-		}
-
-		
-	},mounted:function() {
-		/*for (var i = 0; i < this.we.length; i++) {
-			this.arr.push(this.we[i].checked);
-			console.log(this.arr[0]);
-		}*/
-		/*for (var i = 0;i<this.we.length;i++){
-			var  arrs=[];
-			arrs.push(this.we[i].checked);
-			console.log(arrs)
-		}*/
-	}
-})
-</script>
-
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
+
+
+
+<script>
+    layui.use(['laydate', 'form'], function () {
+        var laydate = layui.laydate;
+        var form = layui.form;
+    });
+
+</script>
+
+<script>
+    Vue.component('todo-item', {
+
+        props: ['item']
+    })
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            cars: [
+            ]
+        },
+        mounted() {
+            //this.getList();
+            // var storage1 = window.localStorage;
+            // var fl_id = storage1.getItem("fenlei_id");
+            // var fl_id2 = Number(fl_id);
+            // console.log(fl_id);
+            // console.log(fl_id2);
+            var _this = this;
+            const params = new URLSearchParams();
+            params.append('user_id', 1);
+
+            // params.append('book_id',31);
+            // params.append('amount',2);
+            // params.append('unit_price',30);
+
+            //var n = { 'user_id': this.user_id, 'password': this.password };
+            //var data = JSON.stringify(n);
+            //console.log(n);
+            console.log(params);
+            console.log(this.cars);
+            axios
+                .post('http://119.3.179.137:8080/shopping_car/getUserCarInfo',
+                    params)
+                .then(
+                    //response => (this.info = response)
+                    function (res) {
+                        console.log(res);
+                        // console.log(res.data.data.list_size);
+                        console.log(res.data.data.car_list);
+                        _this.cars = res.data.data.car_list;
+                        console.log(_this.cars);
+                    }
+                )
+                .catch(function (error) { // 请求失败处理
+                    console.log(error);
+                });
+            // axios
+            // .post('http://119.3.179.137:8080/shopping_car/addBook',
+            //     params)
+            // .then(
+            //     //response => (this.info = response)
+            //     function (res) {
+            //         console.log(res);
+            //         // console.log(res.data.data.list_size);
+            //         // console.log(res.data.data.car_list);
+            //         // _this.cars = res.data.data.car_list;
+            //         // console.log(_this.cars);
+            //     }
+            // )
+            // .catch(function (error) { // 请求失败处理
+            //     console.log(error);
+            // });
+
+        },
+        router: new VueRouter(),
+        methods: {
+            selectAll: function (e) {
+                console.log(e, this.cars.length);
+                for (var i = 0; i < this.cars.length; i++) {
+                    this.cars[i].selected = !e;
+                }
+            },
+            deleteGoods: function () {
+                //过滤没有被选中的的商品重新赋值到购物车列表
+                this.cars = this.cars.filter(function (e) {
+                    return !e.selected;
+                });
+                console.log(this.cars);
+            },
+            //删除单条商品
+            deleteNowGoods: function (index) {
+                //根据索引删除list的记录
+                this.cars.splice(index, 1);
+                console.log(this.cars);
+            },
+            edit(item) {
+                console.log('传参');
+                console.log(item);
+                if (!window.localStorage) {
+                    alert("浏览器不支持localstorage");
+                    return false;
+                } else {
+                    var storage = window.localStorage;
+                    storage.setItem("car_item", JSON.stringify(item));
+                    console.log(typeof storage["car_item"]);
+                }
+                //var result = localStorage.getItem('user_item');
+                var car = storage.getItem("car_item");
+                console.log(car);
+                var jcar = JSON.parse(car);
+                console.log(jcar);
+                // console.log(jcar.user_id);
+                console.log(jcar.book_id);
+                // console.log(item);
+                // console.log(item.role_id);
+                const params = new URLSearchParams();
+                params.append('user_id', 1);
+                params.append('book_id', jcar.book_id);
+                console.log(params);
+                axios.post('http://119.3.179.137:8080/shopping_car/deleteBook',
+                    params,
+                )
+                    .then(
+                        function (res) {
+                            console.log(res);
+                            if (res.data.code == 1) {
+                                console.log("编辑成功");
+                                // alert("删除成功");
+                                layer.msg("删除成功");
+                                location.reload();
+                            } else {
+                                layui.msg("删除失败");
+                            }
+
+                        }
+                    )
+                    .catch(function (error) {
+                        console.log(error);
+
+                    })
+                // xadmin.open('编辑', '编辑角色.html', 600, 400);
+                //this.$router.push({ path: '/编辑用户.html', params: { user: item } });
+                // var storage = window.localStorage;
+                // // console.log(this.$route.query);
+                // var role = storage.getItem("role_item");
+                // //console.log(user);
+                // var jrole = JSON.parse(role);
+                // console.log(jrole);
+                // this.name = jrole.name;
+                // this.code = jrole.code;
+                // this.description = jrole.description;
+                // storage.setItem("role_id", jrole.role_id);
+            },
+            edit2(item) {//减数量
+                console.log('传参');
+                console.log(item);
+                if (!window.localStorage) {
+                    alert("浏览器不支持localstorage");
+                    return false;
+                } else {
+                    var storage = window.localStorage;
+                    storage.setItem("car_item", JSON.stringify(item));
+                    console.log(typeof storage["car_item"]);
+                }
+                //var result = localStorage.getItem('user_item');
+                var car = storage.getItem("car_item");
+                console.log(car);
+                var jcar = JSON.parse(car);
+                console.log(jcar);
+                // console.log(jcar.user_id);
+                console.log(jcar.book_id);
+                console.log(jcar.amount);
+                // console.log(item);
+                // console.log(item.role_id);
+                var amount = jcar.amount;
+
+                // const params = new URLSearchParams();
+                // params.append('user_id',jcar.user_id);
+                // params.append('book_id',jcar.book_id);
+                // console.log(params);
+
+
+                if (jcar.amount > 1) {
+
+                    amount = amount - 1;
+                    console.log("-----------------");
+                    console.log(amount);
+                    // alert("1");
+                    const params = new URLSearchParams();
+                    params.append('user_id', 1);
+                    params.append('book_id', jcar.book_id);
+                    params.append('amount', amount);
+                    params.append('unit_price', jcar.unit_price);
+                    console.log(params);
+                    axios.post('http://119.3.179.137:8080/shopping_car/addBook',
+                        params,
+                    )
+                        .then(
+                            function (res) {
+                                console.log(res);
+                                if (res.data.code == 1) {
+
+                                    location.reload();
+                                } else {
+                                    layer.msg("失败");
+                                }
+
+                            }
+                        )
+                        .catch(function (error) {
+                            console.log(error);
+
+                        })
+
+                } else {
+
+                    console.log("-----------------");
+                    console.log(amount);
+                    layer.msg("不能再少了");
+                }
+
+
+            },
+            edit3(item) {//加数量
+                console.log('传参');
+                console.log(item);
+                if (!window.localStorage) {
+                    alert("浏览器不支持localstorage");
+                    return false;
+                } else {
+                    var storage = window.localStorage;
+                    storage.setItem("car_item", JSON.stringify(item));
+                    console.log(typeof storage["car_item"]);
+                }
+                var car = storage.getItem("car_item");
+                console.log(car);
+                var jcar = JSON.parse(car);
+                console.log(jcar);
+                delete jcar.name;
+                delete jcar.image_url;
+                console.log(jcar);
+                console.log(jcar.book_id);
+                console.log(jcar.amount);
+                var amount = jcar.amount;
+                amount = amount + 1;
+                console.log("-----------------");
+                console.log(amount);
+                const params = new URLSearchParams();
+                params.append('user_id', 1);
+                params.append('book_id', jcar.book_id);
+                params.append('amount', amount);
+                params.append('unit_price', jcar.unit_price);
+                console.log(params);
+                axios.post('http://119.3.179.137:8080/shopping_car/addBook',
+                    params,
+                )
+                    .then(
+                        function (res) {
+                            console.log(res);
+                            if (res.data.code == 1) {
+                                // console.log("编辑成功");
+                                // alert("删除成功");
+                                location.reload();
+                            } else {
+                                layer.msg("失败");
+                            }
+
+                        }
+                    )
+                    .catch(function (error) {
+                        console.log(error);
+
+                    })
+
+            },
+            edit4: function () {//清空
+
+                console.log("-----------------");
+
+                const params = new URLSearchParams();
+                params.append('user_id', 1);
+
+                console.log(params);
+                axios.post('http://119.3.179.137:8080/shopping_car/clearCar',
+                    params,
+                )
+                    .then(
+                        function (res) {
+                            console.log(res);
+                            if (res.data.code == 1) {
+
+                                location.reload();
+                            } else {
+                                layer.msg("失败");
+                            }
+
+                        }
+                    )
+                    .catch(function (error) {
+                        console.log(error);
+
+                    })
+
+            },
+            edit5: function () {//下单
+
+                console.log("-----------------");
+
+                const params = new URLSearchParams();
+                params.append('user_id',1);
+
+                console.log(params);
+                axios.post('http://119.3.179.137:8080/shopping_car/toOrder',
+                    params,
+                )
+                    .then(
+                        function (res) {
+                            console.log(res);
+                            if (res.data.code == 1) {
+
+                                console.log( res.data.data.order_id);
+                                
+                                localStorage.setItem("dingdanid",res.data.data.order_id);
+                                xadmin.open('收货信息', '收货信息.html', 800, 400);
+
+                            } else {
+                                layer.msg("失败");
+                            }
+
+                        }
+                    )
+                    .catch(function (error) {
+                        console.log(error);
+
+                    })
+
+            },
+
+        },
+        computed: {
+            isSelectAll: function () {
+                return this.cars.every(function (e) {
+                    return e.selected;
+                });
+            },
+            getGoodsNums: function (e) {
+                //已选中商品
+                var goods = this.cars;
+                // .filter(function (e) {
+                //     return e.selected;
+                // });
+                //已选中商品总价格
+                var totalGoodsPrice = 0;
+                for (var i = 0; i < goods.length; i++) {
+                    totalGoodsPrice += goods[i].unit_price * goods[i].amount;
+                }
+                return {
+                    goodsNum: goods.length,
+                    goodsPrice: totalGoodsPrice
+                }
+            }
+        }
+    })
+</script>
+
 </html>

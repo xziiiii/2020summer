@@ -1,0 +1,288 @@
+﻿<!DOCTYPE html>
+<html class="x-admin-sm">
+
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.2</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+        content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="stylesheet" href="./css/font.css">
+    <link rel="stylesheet" href="./css/xadmin.css">
+    <script src="./lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./js/xadmin.js"></script>
+    <!--[if lt IE 9]>
+          <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+          <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    <!-- vue	-->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
+    <script src="https://cdn.staticfile.org/axios/0.18.0/axios.min.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+    <script src="https://cdn.staticfile.org/vue-router/2.7.0/vue-router.min.js"></script>
+
+</head>
+
+<body>
+    <div class="x-nav">
+        <span class="layui-breadcrumb">
+            <a href="">首页</a>
+            <a href="">演示</a>
+            <a>
+                <cite>导航元素</cite></a>
+        </span>
+        <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+            onclick="location.reload()" title="刷新">
+            <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i></a>
+    </div>
+    <div class="layui-fluid" id="app">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-body ">
+                        <!-- <form class="layui-form layui-col-space5">
+                            <div class="layui-input-inline layui-show-xs-block">
+                                <select name="search_word">
+                                    <option value="">图书分类</option>
+                                    <option value="1">哲学宗教类</option>
+                                    <option value="2">科学类</option>
+                                    <option value="3">政治法律类</option>
+                                    <option value="4">军事类</option>
+                                    <option value="5">经济类</option>
+                                    <option value="6">文化教育体育类</option>
+                                    <option value="7">历史类</option>
+                                    <option value="8">医药卫生类</option>
+                                </select>
+                            </div>
+                            <div class="layui-input-inline layui-show-xs-block">
+                                <button class="layui-btn" lay-submit="" lay-filter="sreach">
+                                    <i class="layui-icon">&#xe615;</i></button>
+                            </div>
+                        </form> -->
+                    </div>
+                    <div class="layui-card-body layui-table-body layui-table-main">
+                        <div class="index_focus1" id="app">
+
+                            <ul>
+
+                                <li v-for="(item,i) in books">
+                                    <p class="paiming">{{1+i}}</p>
+                                    <img v-bind:src="item.image_url">
+                                    </br>
+
+                                    <div id="p2">
+                                        <p style="font-size: 17px;">《{{item.name}}》</p>
+                                    </div>
+                                    <p class="pingfen">评分：{{item.rating}}</p>
+                                    <p class="pl" style=" color: grey; font-size: 14px;">
+                                        作者：{{item.author}}
+                                    </p>
+
+                                    <div id="zhidi" name="zhidi">
+                                        <p style=" color: grey; font-size: 12px;">
+                                            评分人数：{{item.number}}
+                                        </p>
+                                    </div>
+                                    <span class="layui-btn layui-btn-normal layui-btn-mini" v-on:click="edit(item)"
+                                        style=" width:200px;">查看详情</span>
+                                </li>
+
+                            </ul>
+
+                        </div>
+                    </div>
+                    <!-- <table class="layui-table layui-form">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>
+                                                                <input type="checkbox" lay-filter="checkall" name="" lay-skin="primary">
+                                                            </th>
+                                                            <th>书名</th>
+                                                            <th>价格</th>
+                                    <th>浏览量</th>
+                                    <th>店铺交易</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="item in books">
+                                    <td><img v-bind:src="item.image_url"></td>
+                                    <td>{{item.name}}</td>
+                                    <td>{{item.price}}</td>
+                                    <td>{{item.look_mount}}</td>
+                                    <td>{{item.store_mount}}</td>
+                                
+                                </tr>
+
+
+                            </tbody>
+                        </table> -->
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<style>
+    .paiming {
+        font-size: 80px;
+        color: grey;
+        z-index: 100;
+        position: absolute;
+    }
+
+    .pingfen {
+        color: red;
+        font-size: 17px;
+    }
+
+    .pl {
+        width: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        /*加宽度width属来兼容部分浏览*/
+    }
+
+    #p2 {
+        width: 200px;
+        height: 51px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    #app ul {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    #app li {
+        width: 200px;
+        padding: 8px;
+        list-style: none;
+        margin-right: 10px;
+        margin-left: 10px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #eee;
+    }
+
+    #app img {
+        height: 240px;
+        width: 180px;
+        /*         margin-top: -20px; */
+        margin: 10px;
+        z-index: 0;
+    }
+</style>
+
+<script>
+    layui.use(['laydate', 'form'], function () {
+        var laydate = layui.laydate;
+        var form = layui.form;
+        // form.on('submit(search)',
+        //     function (data) {
+        //         var info = data.field;
+        //         console.log(data);
+        //         console.log(info);
+        //         //delete info.role;
+
+        //         const params = new URLSearchParams();
+        //         //var storage = window.localStorage;
+        //         //var store_id = storage.getItem("store_id");
+        //         params.append('cate_id', info.search_word);
+        //         params.append('left', 0);
+        //         params.append('right', 4);
+        //         console.log(params);
+        //         axios
+        //             .post('http://119.3.179.137:8080/book/getCategoryBookListWithLimit',
+        //                 params)
+        //             .then(
+        //                 function (res) {
+        //                     console.log(res);
+        //                     console.log(res.data.data.book_list);
+        //                     var storage = window.localStorage;
+        //                     storage.setItem("result_list", JSON.stringify(res.data.data.book_list));
+        //                     var result = storage.getItem("result_list");
+        //                     console.log(result);
+        //                     xadmin.father_reload();
+        //                     setTimeout(function () {
+        //                         layui.form.render();//延迟重新渲染
+        //                     }, 10);
+        //                 }
+        //             )
+        //             .catch(function (error) { // 请求失败处理
+        //                 console.log(error);
+        //             });
+        //         return false;
+        //     });
+
+    });
+
+
+
+
+
+</script>
+
+<script>
+    Vue.component('todo-item', {
+
+        props: ['item']
+    })
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            books: [
+            ]
+        },
+        mounted() {
+            //this.getList();
+            var storage1 = window.localStorage;
+            // var fl_id = storage1.getItem("fenlei_id");
+            // var fl_id2 = Number(fl_id);
+            // console.log(fl_id);
+            // console.log(fl_id2);
+            var _this = this;
+            const params = new URLSearchParams();
+            //params.append('cate_id', fl_id);
+            params.append('left', 0);
+            params.append('right', 30);
+            //var n = { 'user_id': this.user_id, 'password': this.password };
+            //var data = JSON.stringify(n);
+            //console.log(n);
+            console.log(params);
+            console.log(this.books);
+            axios
+                .post('http://119.3.179.137:8080/book/getBookRankListByRatingWithLimit',
+                    params)
+                .then(
+                    //response => (this.info = response)
+                    function (res) {
+                        console.log(res);
+                        // console.log(res.data.data.list_size);
+                        console.log(res.data.data.rank_list);
+                        _this.books = res.data.data.rank_list;
+                        console.log(_this.books);
+                    }
+                )
+                .catch(function (error) { // 请求失败处理
+                    console.log(error);
+                });
+        },
+        router: new VueRouter(),
+        methods: {
+            getList() {
+            }
+
+        }
+    })
+</script>
+
+</html>
